@@ -85,6 +85,8 @@ try {
     [IO.File]::WriteAllText((Join-Path $ocrSource 'Jianyi.OcrHost.exe'), 'new-ocr', $utf8)
     New-Item -ItemType Directory -Path (Join-Path $oldSource 'OcrHost') | Out-Null
     [IO.File]::WriteAllText((Join-Path $oldSource 'OcrHost\Jianyi.OcrHost.exe'), 'old-ocr', $utf8)
+    New-Item -ItemType Directory -Path (Join-Path $oldSource 'assets\dictionary') | Out-Null
+    [IO.File]::WriteAllText((Join-Path $oldSource 'assets\dictionary\dict-en-zh.sqlite'), 'old-dictionary', $utf8)
 
     $installerSource = Join-Path $repoRoot 'installer'
     $legacyManifests = Join-Path $runRoot 'legacy-manifests'
@@ -177,11 +179,26 @@ try {
 
     $baseInstaller = Join-Path $runRoot 'base-setup.exe'
     Compile-Setup $testScript ($options + @("/DOutputFile=$baseInstaller"))
-    $previous = Make-Legacy 'ocr-protected'
-    Assert-That ((Run-Setup $baseInstaller "/S /D=$previous") -ne 0) 'Base setup should protect installed OCR'
-    Assert-That ([IO.File]::ReadAllText((Join-Path $previous 'OcrHost\Jianyi.OcrHost.exe')) -eq 'old-ocr') 'Installed OCR changed'
+    $previous = Make-Legacy 'keep-optional-components'
+    $existingOcr = Join-Path $previous 'OcrHost\Jianyi.OcrHost.exe'
+    $existingDictionary = Join-Path $previous 'assets\dictionary\dict-en-zh.sqlite'
+    $personalOcrFile = Join-Path $previous 'OcrHost\custom.txt'
+    [IO.File]::WriteAllText($personalOcrFile, 'personal OCR file', $utf8)
+    foreach ($attempt in 1..2) {
+        Assert-That ((Run-Setup $baseInstaller "/S /D=$previous") -eq 0) 'Base setup failed to upgrade a previous OCR installation'
+        Assert-That ([IO.File]::ReadAllText((Join-Path $previous $exeName)) -eq 'new-program') 'Main program was not upgraded'
+        Assert-That ([IO.File]::ReadAllText($existingOcr) -eq 'old-ocr') 'Installed OCR changed'
+        Assert-That ([IO.File]::ReadAllText($existingDictionary) -eq 'old-dictionary') 'Installed dictionary changed'
+        Assert-Data $previous
+    }
+    $baseUninstaller = Join-Path $runRoot 'uninstall-retained-fixture.exe'
+    Copy-Item -LiteralPath (Join-Path $previous 'Jianyi-uninstall.exe') -Destination $baseUninstaller
+    Assert-That ((Run-Setup $baseUninstaller "/S _?=$previous") -eq 0) 'Uninstall after retaining optional components failed'
+    Assert-That (-not (Test-Path -LiteralPath $existingOcr)) 'Verified retained OCR was not uninstalled'
+    Assert-That (-not (Test-Path -LiteralPath $existingDictionary)) 'Verified retained dictionary was not uninstalled'
+    Assert-That ([IO.File]::ReadAllText($personalOcrFile) -eq 'personal OCR file') 'Uninstall changed an unrelated OCR file'
     Assert-Data $previous
-    $results.Add('non-OCR setup cannot remove installed OCR')
+    $results.Add('base setup upgrades legacy and registered OCR installations while retaining verified optional components')
 
     $cleanScript = Join-Path $runRoot 'Jianyi-clean.nsi'
     $clean = $script.Replace('  Call ReadOcrSelection', "  StrCpy " + '$CleanInstall 1' + [Environment]::NewLine + '  Call ReadOcrSelection')

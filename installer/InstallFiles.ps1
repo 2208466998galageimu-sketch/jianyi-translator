@@ -86,16 +86,19 @@ try {
     }
     Assert-Directory $root
     $ledger = Join-Path $root $ledgerName
+    $retainedManifest = Join-Path $PSScriptRoot 'retained-program.lst'
+    $installOcr = $env:JianyiInstallOcr -eq '1'
     $installed = @{}
     $incoming = @{}
     $knownLegacy = $false
     if ($Mode -ne 'Uninstall') {
         Read-Manifest (Join-Path $PSScriptRoot 'program-main.lst') $incoming
-        if ($env:JianyiInstallOcr -eq '1') { Read-Manifest (Join-Path $PSScriptRoot 'program-ocr.lst') $incoming }
+        if ($installOcr) { Read-Manifest (Join-Path $PSScriptRoot 'program-ocr.lst') $incoming }
         $incoming[$uninstaller] = ''
     }
 
     if ($Mode -eq 'Register') {
+        if (Find-Item $retainedManifest) { Read-Manifest $retainedManifest $incoming }
         $lines = foreach ($entry in $incoming.GetEnumerator()) {
             $path = Resolve-File $root $entry.Key
             $hash = Get-Hash $path
@@ -142,9 +145,17 @@ try {
     }
 
     $owned = @{}
+    $retained = [Collections.Generic.List[string]]::new()
     foreach ($entry in $installed.GetEnumerator()) {
         $path = Resolve-File $root $entry.Key
-        if ([IO.File]::Exists($path) -and (Get-Hash $path) -eq $entry.Value) { $owned[$entry.Key] = $path }
+        if (![IO.File]::Exists($path) -or (Get-Hash $path) -ne $entry.Value) { continue }
+        $keepOptional = (!$installOcr -and $entry.Key.StartsWith('OcrHost\', [StringComparison]::OrdinalIgnoreCase)) -or
+            $entry.Key -eq 'assets\dictionary\dict-en-zh.sqlite'
+        if ($Mode -eq 'Remove' -and $keepOptional -and !$incoming.ContainsKey($entry.Key)) {
+            $retained.Add("$($entry.Value)|$($entry.Key)")
+        } else {
+            $owned[$entry.Key] = $path
+        }
     }
     foreach ($relative in $incoming.Keys) {
         $path = Resolve-File $root $relative
@@ -153,6 +164,9 @@ try {
         }
     }
     if ($Mode -eq 'Check') { exit 0 }
+    if ($Mode -eq 'Remove') {
+        [IO.File]::WriteAllLines($retainedManifest, $retained.ToArray(), $utf8)
+    }
 
     # Verify a file again immediately before removing it; uninstallers and the main executable go last.
     foreach ($relative in $owned.Keys | Sort-Object { $_ -in @($uninstaller,$env:JianyiProgramName) }, { $_ }) {

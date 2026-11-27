@@ -109,7 +109,9 @@ Function .onInit
   StrCpy $INSTDIR $PreviousInstallDir
   ReadRegStr $PreviousVersion HKCU "${UNINST_KEY}" "DisplayVersion"
   StrCpy $WelcomeText "检测到已安装版本 $PreviousVersion：$\r$\n$PreviousInstallDir$\r$\n$\r$\n点击「安装」后会关闭简译，按版本清单清理旧程序文件，再在原目录安装 ${AppVersion}。默认保留本地数据。"
+!ifdef OcrSourceDir
   Call ConfigurePreviousOcr
+!endif
 FunctionEnd
 
 Function UpgradeDirectoryPre
@@ -311,20 +313,16 @@ Function ReadOcrSelection
   !endif
 FunctionEnd
 
+!ifdef OcrSourceDir
 Function ConfigurePreviousOcr
   IfFileExists "$PreviousInstallDir\OcrHost\Jianyi.OcrHost.exe" 0 ocrDone
-!ifdef OcrSourceDir
   SectionGetFlags ${SecOcr} $0
   IntOp $0 $0 | ${SF_SELECTED}
   IntOp $0 $0 | ${SF_RO}
   SectionSetFlags ${SecOcr} $0
-!else
-  MessageBox MB_OK|MB_ICONSTOP "旧版已安装本地 OCR，请使用带 OCR 组件的安装包升级，以保留该功能。尚未卸载或修改旧版。" /SD IDOK
-  SetErrorLevel 2
-  Abort
-!endif
   ocrDone:
 FunctionEnd
+!endif
 
 Section "Uninstall"
   ; 正在运行的实例会占用文件，先结束
