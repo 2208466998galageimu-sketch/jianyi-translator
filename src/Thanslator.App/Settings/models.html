@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'none'; form-action 'none'; base-uri 'none'">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>简译 · 模型配置</title>
+<style>
+:root{color-scheme:dark;font:14px/1.5 "Segoe UI","Microsoft YaHei UI",sans-serif;--bg:#111116;--panel:#191a22;--card:#22232e;--edge:#343644;--fg:#f0f1f7;--sub:#b3b7c9;--blue:#9aaeff;--accent:#b7c5ff;--mint:#85ddb8}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% 0,#25283d 0%,transparent 60%),var(--bg);color:var(--fg);display:grid;justify-items:center;align-content:start;padding:clamp(16px,7vh,70px) 16px}
+main{width:min(100%,640px);overflow:hidden;background:var(--panel);border:1px solid var(--edge);border-radius:18px;box-shadow:0 24px 85px #07081280}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 20px;border-bottom:1px solid #ffffff11}
+.brand{display:flex;align-items:center;gap:9px;font-weight:650}.mark{display:grid;place-items:center;width:24px;height:24px;border-radius:7px;background:#343a54;color:#dce4ff;font-size:13px}.demo{color:var(--sub);font-size:12px}
+#app{padding:22px clamp(16px,5vw,32px) 27px}
+h1{margin:0 0 20px;font-size:25px;letter-spacing:-.025em;line-height:1.25}
+h2{margin:0;font-size:15px}
+p{margin:0}.use{display:inline-block;margin-left:7px;color:#d0d9ff;background:#343c58;border-radius:5px;padding:0 6px;font-size:11px}.pickers{display:flex;gap:7px;flex-wrap:wrap}.file-name{overflow-wrap:anywhere}.muted{color:var(--sub);font-size:12px}.stack{display:grid;gap:9px}
+.card,.group{background:var(--card);border:1px solid var(--edge);border-radius:12px}
+.card{display:flex;align-items:center;gap:12px;padding:13px}
+.card .grow{flex:1;min-width:0}.current{margin-top:3px;overflow-wrap:anywhere}
+.meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.icon{flex:none;width:36px;height:36px;display:grid;place-items:center;color:var(--blue);background:#30354f;border-radius:9px}
+.icon svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.55}
+.pill{border-radius:99px;background:#1a3b32;color:#a9efd1;padding:1px 8px;font-size:11px;white-space:nowrap}
+button,input,select{font:inherit}button{cursor:pointer;color:var(--fg);border:1px solid #ffffff20;border-radius:8px;background:#303241;padding:6px 11px;font-weight:600;white-space:nowrap}
+button:hover{background:#3c4054}button:focus-visible,input:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+button[disabled]{opacity:.5;cursor:default}.primary{background:var(--accent);color:#171e35;border-color:transparent}.primary:hover{background:#d0d9ff}
+.back{background:none;border:0;color:var(--blue);margin:-3px 0 12px;padding:4px 0}
+.selection{display:flex;gap:6px;flex-wrap:wrap;margin:-4px 0 15px}.selection button{flex:1}.selection .selected{color:#e1e7ff;background:#343c60;border-color:#798dd8}
+.details{display:grid;gap:8px;margin-top:12px}.toggle{display:flex;width:100%;align-items:center;justify-content:space-between;text-align:left;border:0;background:transparent;padding:11px 13px;border-radius:11px}
+.toggle span:last-child{color:var(--sub)}
+.reveal{border-top:1px solid #ffffff17;padding:3px 13px 10px}.row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 0}.row+.row{border-top:1px solid #ffffff13}.row strong{font-size:13px}.row .muted{margin-top:2px}
+.language-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));gap:7px}.language-grid label{display:flex;align-items:center;gap:7px;padding:7px 9px;background:#1b1c25;border:1px solid var(--edge);border-radius:8px;color:var(--fg);cursor:pointer}.language-grid input{width:auto;accent-color:var(--accent);margin:0}.language-grid label:has(:checked){border-color:#798dd8}.language-grid small{margin-left:auto;color:var(--mint)}.import-tools{display:flex;flex-wrap:wrap;align-items:center;gap:8px}.import-plan{display:grid;gap:6px;padding:10px 12px;border:1px solid var(--edge);border-radius:8px;background:#1b1c25}.import-plan ul{margin:0;padding-left:20px}.import-plan p{color:var(--sub)}
+.form{display:grid;gap:8px;padding:8px 0 2px}.form label{display:grid;gap:3px;font-size:12px;color:var(--sub)}
+input,select{min-width:0;width:100%;background:#181921;border:1px solid var(--edge);border-radius:7px;color:var(--fg);padding:7px 9px}
+.actions{display:flex;gap:7px;justify-content:flex-end;flex-wrap:wrap;margin-top:4px}.job{margin-top:12px;padding:10px 13px;background:#282e43;border:1px solid #4b5780;border-radius:9px}
+.meter{width:100%;height:6px;margin-top:8px;border-radius:50px;background:#141621;overflow:hidden}.meter i{display:block;height:100%;background:var(--accent);transition:width .2s}
+#notice{padding:0 0 12px;color:var(--mint);font-size:13px}#notice:empty{display:none}
+@media(max-width:400px){.card{gap:8px;padding:10px}.icon{width:29px;height:29px}.row{align-items:flex-start;flex-wrap:wrap}.row button{margin-left:auto}}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:2;width:max-content;max-width:calc(100% - 28px);background:#302832;color:#ffe8ed;border:1px solid #815361;border-radius:10px;box-shadow:0 8px 28px #0008;padding:9px 13px;text-wrap:pretty}.toast:empty{display:none}
+dialog{width:min(510px,calc(100% - 32px));max-height:calc(100% - 32px);padding:20px;color:var(--fg);background:var(--panel);border:1px solid var(--edge);border-radius:14px}
+dialog::backdrop{background:#07080dbb}dialog h2{font-size:18px}dialog .row{padding:0 0 10px}dialog dl{margin:12px 0 0;display:grid;gap:2px}dialog dt{font-weight:600;margin-top:7px}dialog dd{margin:0;color:var(--sub);overflow-wrap:anywhere}dialog code{color:var(--accent)}
+body{padding:0;background:transparent;min-height:0}main{box-shadow:none}header{display:none}
+button[data-action="back"].back{display:none}
+.removable{align-items:stretch}.removable>div{display:grid;gap:5px;align-content:start}.removable label{min-height:38px}.removal-dialog p{overflow-wrap:anywhere}.removal-dialog .actions{margin-top:14px}
+.form .select-all-models{display:flex;align-items:center;gap:8px;justify-self:start;cursor:pointer}.select-all-models input{width:auto;margin:0;accent-color:var(--accent)}
+.bounded-list{overflow-y:auto;scrollbar-gutter:stable;overscroll-behavior-y:contain}
+.bounded-list:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+[data-scroll-list] th{position:sticky;top:0;background:var(--raised);z-index:1}
+[data-scroll-list="libraries"]{display:grid;gap:11px;min-height:0}
+.language-grid.removable{grid-template-columns:minmax(0,1fr)}
+:root{--panel:#1c1e28;--card:#252835;--edge:#383c50;--fg:#f2f3fa;--sub:#b6bdd0;--accent:#bdc9ff}main{width:100%;max-width:none;border:0;border-radius:0;overflow:visible;background:transparent}#app{padding:0 0 18px}h1{font-size:27px;margin-bottom:19px;line-height:1.55}.current{display:block;font-size:17px}.current-card{display:block;margin-bottom:15px}.card,.group{border-radius:13px}.group .row strong{font-size:14px}.row{align-items:center}.row label.grow{display:flex;gap:8px;align-items:center}.grow small{display:block;margin-top:4px}.actions button{font-weight:400}.endpoint{overflow-wrap:anywhere;font-size:12px;color:var(--sub)}.error{color:#ffd1d6}#native-status{white-space:pre-wrap;color:#ffd1d6}#native-status:empty{display:none}.storage-link{margin-top:16px}.secondary button{flex:0 1 auto}.details{gap:12px}.selection{margin-top:14px}.selection button{font-weight:400}#connection{border:1px solid var(--edge);border-radius:13px;background:var(--card);padding:15px;gap:12px}#connection label{font-size:13px}#connection input,#connection select{padding:8px 10px}.reveal{padding:8px 15px 12px}.row .actions{margin:0}.removal-dialog label{display:flex;align-items:center;gap:7px;margin-block:14px}.current-card .row{padding:4px 0}.current-card .pill{margin:0}
+ .recommend-card{padding:11px 12px;margin-top:8px;border:1px solid var(--edge);border-radius:9px}
+ .recommend-card .row{border:0;margin:0;padding:3px 0}.recommend-card small,.download-position small{display:block;color:var(--sub)}
+ .recommend-details,.more-downloads{margin-top:8px;color:var(--sub)}.recommend-details summary,.more-downloads summary{cursor:pointer}
+ .download-position .grow,.download-position span,#download-summary dd{overflow-wrap:anywhere;font-size:12px}
+ #download-confirm{width:min(480px,calc(100% - 32px));max-height:90vh;overflow:auto}
+</style>
+</head>
+<body>
+<main>
+<header><div class="brand"><span class="mark" aria-hidden="true">译</span>简译</div><span class="demo"></span></header>
+<section id="app" aria-label="模型配置"></section>
+</main>
+<p id="toast" class="toast" role="status" aria-live="polite"></p>
+<dialog id="language-help" aria-labelledby="language-help-title">
+  <form method="dialog" class="row"><h2 id="language-help-title">语言包导入帮助</h2><button autofocus>关闭</button></form>
+  <dl>
+    <dt>双向包</dt><dd>一对语言，包含两个方向，例如简体中文 ↔ 英语。</dd>
+    <dt>多向包</dt><dd>包含多对语言。简译按清单列出的方向提供翻译，每一对都要有往返方向。</dd>
+    <dt>文件要求</dt><dd>选择 ZIP。包内包含 <code>manifest.json</code>、CTranslate2 模型、配置、词表和分词器文件。</dd>
+    <dt>清单必填键</dt><dd><code>formatVersion</code>、<code>engine</code>、<code>kind</code>、<code>source</code>、<code>license</code>、<code>directions</code>。版本 3 还需 <code>architecture</code>，每条方向需 <code>sourceLanguage</code>、<code>targetLanguage</code>、<code>path</code>。</dd>
+    <dt>已有 Transformers 模型</dt><dd>可选择包含配置、完整 Safetensors 权重和分词文件的 ZIP。检查发现可转换的格式时，会提供导入助手。</dd>
+  </dl>
+</dialog>
+<dialog id="remove-model-dialog" class="removal-dialog" aria-labelledby="remove-model-title">
+  <form id="remove-model-confirm">
+    <h2 id="remove-model-title">删除模型配置</h2><p id="remove-model-message"></p>
+    <label id="delete-files-label"><input type="checkbox" id="delete-managed-files" style="width:auto"> 同时删除简译管理的模型文件</label>
+    <div class="actions"><button type="button" id="remove-model-cancel" autofocus>取消</button><button class="primary">删除</button></div>
+  </form>
+</dialog>
+<dialog id="download-confirm" aria-labelledby="download-title">
+  <form id="download-confirm-form" class="stack">
+    <h2 id="download-title">确认下载</h2>
+    <div id="download-summary"></div>
+    <div class="actions"><button type="button" id="download-cancel" autofocus>取消</button><button class="primary" id="download-apply">确认</button></div>
+  </form>
+</dialog>
+<script>const app=document.querySelector('#app');
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const button=(label,action,value='',cls='',disabled=false)=>'<button type="button" class="'+cls+'" data-action="'+action+'" data-value="'+esc(value)+'"'+(disabled?' disabled':'')+'>'+label+'</button>';
+let page='translation',method='mt',expanded=null,busy=false,inventory={configs:[]},note='';
+const labels={mt:'本地翻译',llm:'本机 LLM',api:'远程 API',ocr:'本地 OCR',assistant:'导入助手模型'};
+let pendingRemove=[],importReturn=null,returningImport=false;
+const languageNames={'zh-Hans':'简体中文',en:'英语',ja:'日语',ko:'韩语',fr:'法语',de:'德语',es:'西班牙语'};
+let selectedLanguages=new Set(['zh-Hans','en']);
+let languageDraft=null;
+function activeOffline(){return inventory.configs.find(c=>c.kind==='mt'&&c.path===inventory.currentMtPath);}
+let moreLanguages=false,pendingDownload=null;
+function downloadPosition(){
+ const space=inventory.freeDownloadBytes==null?'':' · 可用 '+formatSize(inventory.freeDownloadBytes);
+ return '<div class="row download-position"><div class="grow"><small>保存位置'+space+'</small><span>'+esc(inventory.downloadDirectory||'')+'</span></div>'
+   +button('更改位置','download-directory','','back')+'</div>'+(inventory.offline?'<small class="muted">离线模式已开启，只能使用已下载文件。</small>':'');
+}
+function tooLarge(bytes){return inventory.freeDownloadBytes!=null && bytes>inventory.freeDownloadBytes;}
+function fileStatus(plan){
+ if(plan.unavailable)return '下载位置不可读';
+ if(plan.cached)return '文件已下载 · 启用时校验';
+ if(tooLarge(plan.remainingBytes))return '空间不足 · 仍需 '+formatSize(plan.remainingBytes);
+ if(plan.canResume)return '剩余 '+formatSize(plan.remainingBytes);
+ return '需下载 '+formatSize(plan.remainingBytes??plan.totalBytes);
+}
+function assetAction(plan){return plan.cached?'启用':plan.canResume?'继续下载':'下载并启用';}
+function languageRecommendation(){
+ const pack=inventory.configs.find(c=>c.id==='common-languages-m2m100-7c1b2620');
+ const existing=pack?.languages||[];
+ existing.forEach(code=>selectedLanguages.add(code));
+ const plan=inventory.offlineLanguagePack||{};
+ const selected=Object.keys(languageNames).filter(code=>selectedLanguages.has(code));
+ const added=selected.flatMap((left,index)=>selected.slice(index+1)
+   .filter(right=>!existing.includes(left)||!existing.includes(right))
+   .map(right=>languageNames[left]+' ↔ '+languageNames[right]));
+ const heading=selected.map(code=>languageNames[code]).join('、')||'选择翻译语言';
+ const currentPack=pack&&current(pack)&&added.length===0&&plan.cached;
+ const blocked=plan.unavailable||inventory.mtHostReady===false||selected.length<2||tooLarge(plan.remainingBytes)||
+   (inventory.offline&&plan.remainingBytes>0)||currentPack;
+ const checks=Object.entries(languageNames).map(([code,label])=>'<label><input type="checkbox" name="offline-language" value="'+code+'" '
+   +(selectedLanguages.has(code)?'checked':'')+' '+(existing.includes(code)?'disabled':'')+'>'+label+(existing.includes(code)?' · 已启用':'')+'</label>').join('');
+ return '<section class="recommend-card"><div class="row"><div class="grow"><strong>'+esc(heading)+'</strong><small>'
+   +(currentPack?'使用中':esc(fileStatus(plan)))+' · 共用一份模型</small></div>'
+   +button(currentPack?'使用中':plan.cached&&added.length?'启用所选语言':assetAction(plan),'download-languages','','primary',blocked)+'</div>'
+   +'<div class="row"><small>'+esc((added.length?'新增 '+added.length+' 组双向翻译 · '+added.slice(0,3).join('、')+(added.length>3?' 等':''):'')||'')+'</small>'
+   +button(moreLanguages?'收起语言':'选择语言','show-languages','','back')+'</div>'
+   +(moreLanguages?'<div class="language-grid">'+checks+'</div>':'')
+   +(inventory.mtHostReady===false?'<small class="error">本地翻译组件缺失，请修复简译安装。</small>':'')
+   +'<details class="recommend-details"><summary>下载详情</summary><small>语言包 '+formatSize(plan.totalBytes)+' · Hugging Face · MIT</small></details></section>';
+}
+const connectionDrafts=new Map();let modelDraftDirty=false,modelOptions=[],assistantRoute='api',provider='custom';
+function fitLists(){
+  for(const list of document.querySelectorAll('[data-model-list]')){
+    const rows=[...list.children];
+    list.style.maxHeight=rows.length>5?Math.ceil(rows.slice(0,5).reduce((sum,row)=>sum+row.getBoundingClientRect().height,0))+'px':'';
+    list.style.overflowY=rows.length>5?'auto':'';
+  }
+}
+function configured(){return inventory.configs.filter(c=>page==='assistant'?c.kind==='assistant':c.kind===method);}
+function current(c){
+ if(c.kind==='assistant')return page==='assistant';
+ if(c.kind==='llm'&&(c.storageRoot||inventory.currentManagedRoot))
+   return inventory.mode==='llm'&&c.storageRoot===inventory.currentManagedRoot&&c.model===inventory.currentLocal;
+ if(c.kind==='mt')return c.path===inventory.currentMtPath&&inventory.mode==='mt';
+ if(c.kind==='ocr')return c.path===inventory.ocrPath;
+ return c.kind===inventory.mode&&c.model===(c.kind==='api'?inventory.currentApi:inventory.currentLocal)&&c.address===(c.kind==='api'?inventory.apiAddress:inventory.localAddress);
+}
+function toggle(label,id,content){return '<section class="group">'+button(label+(expanded===id?' −':' ＋'),'expand',id,'toggle')+(expanded===id?'<div class="reveal">'+content+'</div>':'')+'</section>';}
+function modelName(c){
+ if(c.kind!=='mt')return c.name;
+ const keys=c.keys||['en:zh-Hans'],codes=[...new Set(keys.flatMap(key=>key.split(':')))];
+ if(codes.length===2)return codes.map(code=>languageNames[code]||code).join(keys.length>1?' ↔ ':' → ');
+ return '多语言离线包 · '+codes.length+' 种语言';
+}
+function checkText(c){
+ if(c.lastCheck==='failed')return '<span class="error">'+esc(c.lastCheckMessage||'上次检测失败')+'</span>';
+ if(c.lastCheck==='passed')return '上次检测通过 · '+esc(new Date(c.lastCheckedAt).toLocaleString('zh-CN'));
+ return c.kind==='mt'||c.kind==='ocr'?(c.fileAvailable?'文件已安装 · 未检测':'文件不可用'):'已保存 · 未检测';
+}
+function installed(){
+ const list=configured();
+ const rows=list.map(c=>'<div class="row"><label class="grow"><input style="width:auto" name="remove-model" type="checkbox" value="'+esc(c.id)+'"> <span><strong>'+esc(modelName(c))+'</strong>'+(current(c)?'<span class="pill">使用中</span>':'')+'<small class="muted">'+checkText(c)+'</small></span></label><div class="actions">'+button('检测','check',c.id)+(['api','llm','assistant'].includes(c.kind)?button('编辑','edit',c.id):'')+(c.kind==='assistant'||current(c)?'':button('启用','activate',c.id))+'</div></div>').join('');
+ const bundled=method==='ocr'&&inventory.bundledOcr?'<div class="row"><strong>内置 OCR</strong>'+button('启用','activate','bundled-ocr')+'</div>':'';
+ return '<div data-model-list>'+bundled+rows+'</div>'+(list.length?'<div class="row"><label><input type="checkbox" style="width:auto" id="all-models"> 全选</label>'+button('移除所选','remove','','quiet')+'</div>':'')+(!rows&&!bundled?'<p class="muted">暂无配置</p>':'');
+}
+const providers={custom:{label:'其他兼容服务',address:''},deepseek:{label:'DeepSeek',address:'https://api.deepseek.com/chat/completions'},ollama:{label:'Ollama',address:'http://127.0.0.1:11434/v1'},lmstudio:{label:'LM Studio',address:'http://127.0.0.1:1234/v1'}};
+function isLocalAddress(address){try{return ['localhost','127.0.0.1','[::1]'].includes(new URL(address).hostname);}catch{return false;}}
+function connection(kind){
+ const helper=inventory.configs.find(c=>c.kind==='assistant');const config=connectionDrafts.get(kind)||(kind==='assistant'?(helper&&isLocalAddress(helper.address)===(assistantRoute==='llm')?helper:null):configured().find(current)||configured()[0]);
+ const local=kind==='llm'||kind==='assistant'&&assistantRoute==='llm';
+ const available=Object.entries(providers).filter(([id])=>local?['custom','ollama','lmstudio'].includes(id):['custom','deepseek'].includes(id));
+ return '<form id="connection" class="form" data-kind="'+kind+'"><input name="configId" type="hidden" value="'+esc(config?.id||'')+'"><label>服务商<select id="provider">'+available.map(([id,info])=>'<option value="'+id+'" '+(provider===id?'selected':'')+'>'+info.label+'</option>').join('')+'</select></label>'
+ +'<label>接口地址<input name="address" type="url" required value="'+esc(config?.address||(local?'http://127.0.0.1:11434/v1':''))+'"></label><div class="endpoint" id="resolved-endpoint"></div>'
+ +'<label>模型名称<input name="model" list="model-options" required maxlength="160" value="'+esc(config?.model||'')+'"></label><datalist id="model-options">'+modelOptions.map(name=>'<option value="'+esc(name)+'">').join('')+'</datalist>'
+ +(!local?'<label>API Key<input name="key" type="password" autocomplete="off" placeholder="'+(config?.keySaved?'已保存，留空沿用当前地址的凭据':'未配置')+'"></label>':'')
+ +'<div class="actions">'+button('读取模型列表','list-models','','quiet')+button('取消更改','discard-connection','','quiet')+'<button type="submit" data-mode="test">测试连接</button><button type="submit" data-mode="save" class="primary">保存并启用</button></div></form>';
+}
+function importView(){
+ const pending=inventory.pendingImport?.kind===method?inventory.pendingImport:null;
+ const ready=inventory.configs.some(c=>c.kind==='assistant');
+ const fallback=pending?'<div class="import-plan"><strong>'+esc(pending.name)+'</strong>'+button('重新检查','retry-direct')
+  +(pending.canRepair?'<div class="actions">'+(ready?button('用助手修正并重试','retry-import','','primary'):button('前往配置','helper'))+'</div>':'')+'</div>':'';
+ return '<div class="import-tools">'+button('从资源管理器导入','import','','primary')+button('帮助','help')+button('配置导入助手模型','helper')+'</div>'+fallback;
+}
+function downloads(){
+ if(method==='mt')return downloadPosition()+languageRecommendation();
+ const ocr=method==='ocr';
+ const choices=ocr?(inventory.ocrRecommendations||[]):(inventory.llmRecommendations||[]);
+ const unavailable=ocr&&inventory.ocrHostReady===false;
+ const currentBuiltIn=ocr&&inventory.bundledOcr&&!inventory.configs.some(c=>c.kind==='ocr'&&current(c));
+ const entry=model=>{
+   const plan=model.download||{};
+   const saved=inventory.configs.find(row=>ocr?row.id==='ocr-'+model.id:
+     row.kind==='llm'&&row.model===model.tag&&row.storageRoot===inventory.downloadDirectory);
+   const available=saved&&(!ocr||saved.fileAvailable);
+   const active=available&&current(saved);
+   const bytes=ocr?plan.remainingBytes:(model.cached||saved?0:model.downloadBytes);
+   const status=active?'使用中':available?'已配置':tooLarge(bytes)?'空间不足 · 仍需 '+formatSize(bytes):ocr?fileStatus(plan):
+     model.cached?'文件已下载 · 可复用':'约 '+formatSize(model.downloadBytes)+(inventory.runtimeInstalled?'':' + 运行组件');
+   const label=active?'使用中':available||model.cached?'启用':ocr?assetAction(plan):
+     inventory.runtimeInstalled?'下载并启用':'查看下载量';
+   const action=available&&!active?'activate':ocr?'download-ocr':'download';
+   const name=ocr&&model.id==='v6-medium'?'较大识别包':model.name;
+   const blocked=active||unavailable||plan.unavailable||tooLarge(bytes)||(inventory.offline&&bytes>0);
+   return '<section class="recommend-card"><div class="row"><div class="grow"><strong>'+esc(name)+'</strong><small>'
+     +esc(status)+' · '+(ocr?'中英印刷文字':esc(model.use))+'</small></div>'
+     +button(label,action,available&&!active?saved.id:ocr?model.id:model.tag,'primary',blocked)+'</div>'
+     +'<details class="recommend-details"><summary>下载详情</summary><small>'+esc(ocr?'ModelScope · '+(model.license||''):'Ollama 模型库 · '+model.tag)
+     +(ocr?' · '+formatSize(plan.totalBytes):'')+'</small></details></section>';
+ };
+ const first=currentBuiltIn||unavailable?0:1;
+ const builtIn=currentBuiltIn?'<div class="row"><strong>内置 OCR</strong><span class="pill">使用中</span></div>':'';
+ const warning=unavailable?'<p class="error">当前安装缺少 OCR 运行组件，请使用带 OCR 的安装包。</p>':'';
+ const runtime=ocr?'':'<div class="row"><small>'+(inventory.runtimeInstalled?'运行组件可用':'需要本机运行组件')+'</small>'
+   +button(inventory.runtimeInstalled?'更新组件':'查看组件下载量','runtime','','back',inventory.offline)+'</div>';
+ return downloadPosition()+warning+builtIn+runtime+choices.slice(0,first).map(entry).join('')
+   +(choices.length>first?'<details class="more-downloads"><summary>'+(ocr?'查看其他识别方案':'查看其他规格')+'</summary>'
+      +choices.slice(first).map(entry).join('')+'</details>':'');
+}
+function formatSize(bytes){
+ if(!Number.isFinite(bytes))return '未知大小';
+ return bytes>=1e9?(bytes/1e9).toFixed(1)+' GB':(bytes/1e6).toFixed(1)+' MB';
+}
+async function reviewRuntime(tag=''){
+ const plan=await run('prepare-download',{tag});if(!plan)return;
+ pendingDownload=tag?['download-model',{tag,withRuntime:true}]:['download-runtime',{}];
+ const total=plan.runtimeBytes+plan.modelBytes;
+ document.querySelector('#download-title').textContent=tag?'确认下载模型和运行组件':'确认下载运行组件';
+ document.querySelector('#download-summary').innerHTML='<p>本次需下载 '+formatSize(total)+'</p>'
+   +'<dl><dt>运行组件</dt><dd>'+formatSize(plan.runtimeBytes)+'</dd>'
+   +(tag?'<dt>模型（估算）</dt><dd>'+formatSize(plan.modelBytes)+'</dd>':'')
+   +'<dt>保存位置</dt><dd>'+esc(plan.directory)+'</dd></dl>'
+   +(plan.requiresExpansion?'<p class="muted">安装时还需要解压空间。</p>':'')
+   +(plan.freeBytes!=null&&total>plan.freeBytes?'<p class="error">下载位置空间不足。</p>':'');
+ const apply=document.querySelector('#download-apply');
+ apply.disabled=plan.freeBytes!=null&&total>plan.freeBytes;
+ apply.textContent=tag?'下载并启用':'安装组件';
+ document.querySelector('#download-confirm').showModal();
+}
+function languageForm(){
+ const codes={'auto':'自动识别',en:'英语','zh-Hans':'简体中文',ja:'日语',ko:'韩语',fr:'法语',de:'德语',es:'西班牙语'};
+ let source=languageDraft?.source||inventory.source||'auto',target=languageDraft?.target||inventory.target||'zh-Hans';
+ const keys=activeOffline()?.keys||[],localPack=inventory.mode==='mt';
+ if(localPack&&!keys.length)return '';
+ const from=localPack?[...new Set(keys.map(key=>key.split(':')[0]))]:Object.keys(codes);
+ if(!from.includes(source))source=from[0];
+ const targets=localPack?keys.filter(key=>key.split(':')[0]===source).map(key=>key.split(':')[1]):Object.keys(codes).filter(code=>code!=='auto'&&code!==source);
+ if(!targets.includes(target))target=targets[0];
+ const select=(name,selected,choices)=>'<label>'+(name==='source'?'原文语言':'译文语言')+'<select name="'+name+'">'+choices.map(code=>'<option value="'+code+'" '+(code===selected?'selected':'')+'>'+esc(codes[code]||code)+'</option>').join('')+'</select></label>';
+ return '<details class="group" style="padding:10px;margin-top:10px"><summary>'+esc(codes[source]||source)+' → '+esc(codes[target]||target)+'</summary><form class="form" id="language-form">'+select('source',source,from)+select('target',target,targets)+'<div class="actions"><button class="primary">保存语言</button></div></form></details>';
+}
+function publish(){parent.postMessage({type:'jianyi-model-config',height:document.querySelector('main').offsetHeight,page,state:inventory,assistantReady:inventory.configs.some(c=>c.kind==='assistant')},'*');}
+function render(){
+ const title=page==='assistant'?'导入助手模型':page==='ocr'?'OCR 模型':'翻译模型';
+ const select=page==='translation'?'<div class="selection">'+button('本地翻译','method','mt',method==='mt'?'selected':'')+button('LLM 翻译','method',method==='api'?'api':'llm',method!=='mt'?'selected':'')+'</div>'+(method!=='mt'?'<div class="selection secondary">'+button('本机模型','method','llm',method==='llm'?'selected':'')+button('远程 API','method','api',method==='api'?'selected':'')+'</div>':''):(page==='assistant'?'<div class="selection">'+button('本机服务','assistant-route','llm',assistantRoute==='llm'?'selected':'')+button('远程 API','assistant-route','api',assistantRoute==='api'?'selected':'')+'</div>':'');
+ const active=inventory.configs.find(c=>page==='assistant'?c.kind==='assistant':c.kind===(page==='translation'?inventory.mode:method)&&current(c));
+ const summary=active?modelName(active):page==='ocr'&&inventory.bundledOcr?'内置 OCR':'未配置';
+ const header='<h1>'+title+'</h1><section class="card stack current-card"><div class="row"><div class="grow"><small class="muted">当前使用</small><strong class="current">'+esc(summary)+'</strong></div><span class="pill">'+(active?'使用中':page==='ocr'&&inventory.bundledOcr?'内置组件':'未配置')+'</span></div>'+(active?'<div class="row"><small>'+checkText(active)+'</small>'+button('重新检测','check',active.id)+'</div>':'')+'</section>';
+ app.innerHTML=(page==='assistant'&&importReturn?button('‹ 返回导入','return-import','','back'):'')+header+select+(page==='translation'?languageForm():'')+'<div class="details">'
+ +toggle('切换已有','installed',installed())+(page==='assistant'?connection('assistant'):method==='api'?connection('api'):toggle('推荐下载','downloads',downloads())+toggle('导入自备模型','import',importView())+(method==='llm'?toggle('连接本机服务','connection',connection('llm')):''))
+ +'</div><div class="storage-link">'+button('下载与存储','storage','','back')+'</div><p id="native-status" class="muted" role="status">'+esc(note)+'</p>'+(busy?'<div class="job">正在处理… '+button('取消','cancel')+'</div>':'');
+ if(busy)for(const b of app.querySelectorAll('button,input,select'))if(b.dataset.action!=='cancel')b.disabled=true;
+ const form=app.querySelector('#connection');
+ if(form?.elements.key)form.elements.key.value=connectionDrafts.get(form.dataset.kind)?.key||'';
+ updateEndpoint();fitLists();publish();
+}
+function updateEndpoint(){const form=app.querySelector('#connection'),node=document.getElementById('resolved-endpoint');if(!form||!node)return;try{const url=new URL(form.elements.address.value);let path=url.pathname.replace(/\/$/,'');if(!path.endsWith('/chat/completions'))path=path?path+'/chat/completions':'/v1/chat/completions';url.pathname=path;node.textContent='请求地址：'+url.href;}catch{node.textContent='';}}
+function connectionValues(){const form=app.querySelector('#connection');if(!form)return null;return {...Object.fromEntries(new FormData(form)),kind:form.dataset.kind,id:form.elements.configId.value};}
+window.hasModelDraft=()=>modelDraftDirty||!!languageDraft;
+window.discardModelDraft=()=>{connectionDrafts.clear();modelDraftDirty=false;languageDraft=null;modelOptions=[];render();};
+window.saveModelDraft=async()=>{if(languageDraft){const value=await run('languages',languageDraft);if(!value)return false;}if(modelDraftDirty){const values=connectionValues();if(!values)return false;const value=await run('configure-model',values);if(!value)return false;modelDraftDirty=false;}return true;};
+async function run(action,data){
+ if(busy&&action!=='cancel')return;
+ if(action==='cancel'){await parent.nativeCall('cancel',{});return;}
+ busy=true;note='';if(action==='configure-model'||action==='test-model'||action==='model-list'){const form=app.querySelector('#connection');if(form)connectionDrafts.set(form.dataset.kind,Object.fromEntries(new FormData(form)));}render();
+ try{const value=await parent.nativeCall(action,data);if(action==='configure-model'){connectionDrafts.delete(data.kind);modelDraftDirty=false;}if(value?.configs)syncNativeModels(value);if(value?.pendingImport?.error)parent.nativeToast?.(value.pendingImport.error);return value;}
+ catch(e){
+   note=e.message;parent.nativeToast?.(e.message);
+   if(['download-model','download-ocr','download-languages','download-runtime'].includes(action)){
+     try{syncNativeModels(await parent.nativeCall('model-state'),true);}catch{}
+   }
+   return null;
+ }
+ finally{busy=false;render();}
+}
+function syncNativeModels(value,preserveDraft=false){
+ const first=!inventory.loaded;inventory=value;inventory.loaded=true;if(!preserveDraft)languageDraft=null;
+ if(first&&page==='translation')method=value.mode;
+ if(page==='ocr')method='ocr';else if(page==='assistant')method='assistant';
+ render();
+}
+window.syncNativeModels=syncNativeModels;
+window.showNativeProgress=message=>{const node=document.getElementById('native-status');if(busy&&node)node.textContent=message;};
+window.addEventListener('message',event=>{
+ if(event.source!==parent||event.data?.type!=='jianyi-open-model-page')return;
+ page=event.data.page;
+ if(returningImport){method=importReturn;expanded='import';importReturn=null;returningImport=false;}
+ else{method=page==='ocr'?'ocr':page==='assistant'?'assistant':inventory.mode;expanded='installed';if(page==='assistant'){const record=inventory.configs.find(row=>row.kind==='assistant');assistantRoute=record&&/^http:\/\/(127\.0\.0\.1|localhost)/.test(record.address)?'llm':'api';}}
+ note='';render();
+});
+app.addEventListener('click',async event=>{
+ const control=event.target.closest('[data-action]');if(!control)return;
+ const {action,value}=control.dataset;
+ if(action==='expand'){expanded=expanded===value?null:value;render();}
+ else if(action==='method'){if(!window.hasModelDraft()||await parent.guardNavigation()){method=value;expanded='installed';provider='custom';render();}}
+ else if(action==='assistant-route'){if(!window.hasModelDraft()||await parent.guardNavigation()){assistantRoute=value;connectionDrafts.clear();provider='custom';render();}}
+ else if(action==='activate')await run('activate-model',{id:value});
+ else if(action==='download'){
+   if(inventory.runtimeInstalled)await run('download-model',{tag:value});
+   else await reviewRuntime(value);
+ }
+ else if(action==='download-ocr')await run('download-ocr',{id:value});
+ else if(action==='download-languages')await run('download-languages',{languages:[...selectedLanguages]});
+ else if(action==='runtime')await reviewRuntime();
+ else if(action==='show-languages'){moreLanguages=!moreLanguages;render();}
+ else if(action==='storage'){parent.openPage('storage');}
+ else if(action==='check')await run('check-model',{id:value});
+ else if(action==='edit'){const record=inventory.configs.find(row=>row.id===value);connectionDrafts.set(record.kind,{...record,key:''});modelDraftDirty=false;expanded='connection';if(record.kind==='assistant')assistantRoute=record.address.startsWith('http://127.0.0.1')||record.address.includes('localhost')?'llm':'api';render();}
+ else if(action==='discard-connection'){window.discardModelDraft();}
+ else if(action==='list-models'){const values=connectionValues(),list=await run('model-list',values);if(list){modelOptions=list;note='已读取 '+list.length+' 个模型，也可手动填写';render();}}
+ else if(action==='download-directory')await run('download-directory',{});
+ else if(action==='reset-directory')await run('download-directory',{reset:true});
+ else if(action==='import')await run('import-model',{kind:method});
+ else if(action==='cancel')await run('cancel',{});
+ else if(action==='helper'){importReturn=method;parent.openNativePage('models/assistant');}
+ else if(action==='return-import'){returningImport=true;parent.openNativePage('models/'+(importReturn==='ocr'?'ocr':'translation'));}
+ else if(action==='retry-import')await run('retry-model-import',{repair:true});
+ else if(action==='retry-direct')await run('retry-model-import',{repair:false});
+ else if(action==='help'){
+   const help=document.getElementById('language-help');help.querySelector('dl').innerHTML='<dt>本地翻译</dt><dd>支持含 manifest.json 的双向或多向语言包：formatVersion=3、engine=ctranslate2、architecture、kind、source、license、directions、files。每组语言须有往返方向，文件带大小和 SHA-256。仍兼容旧版英译中 ZIP。</dd><dt>本机 LLM</dt><dd>选择 GGUF 文件或只包含一个 GGUF 的 ZIP，先在本机检查和解包，再试运行。</dd><dt>OCR</dt><dd>选择包含 ocr.json、检测与识别 ONNX 模型和字符表的 ZIP，或完整 OCR 组件 ZIP，包含 Jianyi.OcrHost.exe、ONNX 模型和字符表。</dd>';help.showModal();
+ }else if(action==='remove'){
+   pendingRemove=[...app.querySelectorAll('[name="remove-model"]:checked')].map(i=>i.value);
+   if(!pendingRemove.length){note='请先勾选模型配置。';render();return;}
+   document.getElementById('remove-model-message').textContent='移除所选 '+pendingRemove.length+' 个配置？';
+   const selected=inventory.configs.filter(row=>pendingRemove.includes(row.id));const owned=selected.filter(row=>['mt','ocr','llm'].includes(row.kind));const removeFiles=document.getElementById('delete-managed-files');removeFiles.checked=false;removeFiles.disabled=!owned.length||owned.some(row=>!row.canDeleteFiles);document.getElementById('delete-files-label').title=removeFiles.disabled?'外部或共享模型文件将保留':'';
+   document.getElementById('remove-model-dialog').showModal();
+ }
+});
+app.addEventListener('change',event=>{
+ if(event.target.id==='provider'){provider=event.target.value;const form=event.target.form;form.elements.address.value=providers[provider].address;form.elements.address.dispatchEvent(new Event('input',{bubbles:true}));return;}
+ if(event.target.name==='offline-language'){
+   if(event.target.checked)selectedLanguages.add(event.target.value);else selectedLanguages.delete(event.target.value);return;
+ }
+ if(event.target.closest('#language-form')){
+   const form=event.target.form;languageDraft={source:form.elements.source.value,target:form.elements.target.value};
+   if(event.target.name==='source'){
+     const choices=inventory.mode==='mt'?(activeOffline()?.keys||[]).filter(key=>key.split(':')[0]===languageDraft.source).map(key=>key.split(':')[1]):Object.keys(languageNames).filter(code=>code!==languageDraft.source);
+     form.elements.target.innerHTML=choices.map(code=>'<option value="'+code+'">'+esc(languageNames[code]||code)+'</option>').join('');
+     languageDraft.target=form.elements.target.value;
+   }
+   return;
+ }
+ const items=[...app.querySelectorAll('[name="remove-model"]')],master=document.getElementById('all-models');if(!master)return;
+ if(event.target===master)items.forEach(i=>i.checked=master.checked);
+ const n=items.filter(i=>i.checked).length;master.checked=!!items.length&&n===items.length;master.indeterminate=n>0&&n<items.length;
+});
+app.addEventListener('input',event=>{
+ const form=event.target.form;if(form?.id!=='connection')return;
+ const values=Object.fromEntries(new FormData(form)),previous=connectionDrafts.get(form.dataset.kind);
+ if(event.target.name==='address'&&previous?.address!==values.address&&form.elements.key){values.key='';form.elements.key.value='';}
+ connectionDrafts.set(form.dataset.kind,values);modelDraftDirty=true;updateEndpoint();
+});
+app.addEventListener('submit',async event=>{
+ if(event.target.id==='language-form'){event.preventDefault();const values=Object.fromEntries(new FormData(event.target));const result=await run('languages',values);if(result)languageDraft=null;return;}
+ if(event.target.id!=='connection')return;event.preventDefault();
+ const form=new FormData(event.target),kind=event.target.dataset.kind,data=Object.fromEntries(form);data.kind=kind;data.id=data.configId||'';
+ const result=await run(event.submitter?.dataset.mode==='test'?'test-model':'configure-model',data);
+ if(typeof result==='string'){note=result;render();}
+});
+document.getElementById('remove-model-cancel').onclick=()=>document.getElementById('remove-model-dialog').close();
+document.getElementById('remove-model-confirm').onsubmit=async event=>{event.preventDefault();document.getElementById('remove-model-dialog').close();await run('remove-models',{ids:pendingRemove,deleteFiles:document.getElementById('delete-managed-files').checked});};
+const downloadDialog=document.querySelector('#download-confirm');
+document.querySelector('#download-cancel').onclick=()=>downloadDialog.close();
+document.querySelector('#download-confirm-form').onsubmit=async event=>{
+ event.preventDefault();
+ const request=pendingDownload;
+ downloadDialog.close();
+ if(request)await run(...request);
+};
+downloadDialog.addEventListener('close',()=>{pendingDownload=null;});
+new ResizeObserver(publish).observe(document.querySelector('main'));
+render();
+</script>
+</body>
+</html>

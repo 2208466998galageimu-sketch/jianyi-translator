@@ -1,0 +1,50 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4370.26" />
+    <EmbeddedResource Include="Settings/more-settings.html" />
+    <EmbeddedResource Include="Settings/models.html" />
+    <EmbeddedResource Include="Settings/ocr-models.json" />
+    <Content Include="../../LICENSE" Link="LICENSE" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="../../assets/licenses/*" Link="assets/licenses/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Thanslator.Core\Thanslator.Core.csproj" />
+    <ProjectReference Include="..\Thanslator.Storage\Thanslator.Storage.csproj" />
+    <ProjectReference Include="..\Thanslator.Capture\Thanslator.Capture.csproj" />
+    <ProjectReference Include="..\Thanslator.Dictionary\Thanslator.Dictionary.csproj" />
+    <ProjectReference Include="..\Thanslator.Translation\Thanslator.Translation.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\..\assets\dictionary\dict-en-zh.sqlite" Link="assets\dictionary\dict-en-zh.sqlite" CopyToOutputDirectory="PreserveNewest" Condition="Exists('..\..\assets\dictionary\dict-en-zh.sqlite')" />
+    <Content Include="..\..\assets\overrides\*.json" Link="assets\overrides\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\app.ico" />
+    <None Remove="Assets\app.png" />
+    <Resource Include="Assets\app.ico" />
+    <Resource Include="Assets\app.png" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets\app.ico</ApplicationIcon>
+    <NoWarn>$(NoWarn);WFO0003</NoWarn>
+
+    <!-- 安装包用 GetFileVersion 读取这里；改版本号只改这一处 -->
+    <Version>0.8.2</Version>
+    <AssemblyTitle>简译</AssemblyTitle>
+    <Product>简译</Product>
+    <Company>Jianyi</Company>
+    <Description>本地划词翻译：生硬直译 + 本地 MT</Description>
+  </PropertyGroup>
+
+</Project>

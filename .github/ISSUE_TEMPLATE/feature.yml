@@ -1,0 +1,16 @@
+name: 功能建议
+description: 从实际使用场景说明需要解决什么问题
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: 使用场景和现在遇到的问题
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期望的行为，以及现在的替代办法
+    validations:
+      required: true

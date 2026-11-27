@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-canvas-width="1400" data-canvas-height="1800">
+<head>
+<meta charset="UTF-8">
+<title>简译 Jianyi · 品牌视觉规范 v1.0</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 1400px;
+    font-family: "Segoe UI", "Microsoft YaHei UI", "Microsoft YaHei", system-ui, sans-serif;
+    background: #f5f5f7;
+    color: #1d1d1f;
+  }
+  /* 顶部 */
+  .cover {
+    background: #1d1d1f;
+    color: #fff;
+    padding: 60px 80px;
+  }
+  .cover h1 {
+    font-size: 48px; font-weight: 700; letter-spacing: 2px;
+  }
+  .cover .sub {
+    font-size: 16px; color: #8e8e93; margin-top: 12px;
+    letter-spacing: 3px;
+  }
+  .cover .meta {
+    margin-top: 40px;
+    display: flex; gap: 40px;
+    font-size: 13px; color: #6e6e73;
+  }
+  .cover .meta b { color: #d1d1d6; font-weight: 500; }
+
+  /* 章节 */
+  .section {
+    padding: 50px 80px;
+    border-bottom: 1px solid #e8e8ed;
+  }
+  .section-num {
+    font-size: 12px; color: #8e8e93;
+    letter-spacing: 2px; margin-bottom: 8px;
+  }
+  .section h2 {
+    font-size: 28px; font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .section-desc {
+    font-size: 14px; color: #6e6e73;
+    margin-bottom: 32px; line-height: 1.7;
+  }
+
+  /* 卡片网格 */
+  .row {
+    display: grid;
+    gap: 24px;
+    margin-bottom: 24px;
+  }
+  .row.cols-2 { grid-template-columns: 1fr 1fr; }
+  .row.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .row.cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+  .card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 32px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  }
+  .card-label {
+    font-size: 11px; color: #8e8e93;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  /* Logo 展示 */
+  .logo-showcase {
+    display: flex; align-items: center; justify-content: center;
+    padding: 30px 0;
+  }
+  .icon-box {
+    width: 80px; height: 80px;
+    border-radius: 20px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .icon-box svg { width: 40px; height: 40px; }
+  .icon-dark { background: #1d1d1f; }
+  .icon-light { background: #f5f5f7; border: 1px solid #e8e8ed; }
+  .icon-accent { background: linear-gradient(135deg, #6b8cff, #9b6bff); }
+
+  .wordmark-box {
+    text-align: center; padding: 20px 0;
+  }
+  .wordmark-cn {
+    font-size: 40px; font-weight: 600; letter-spacing: 8px;
+  }
+  .wordmark-en {
+    font-size: 14px; color: #8e8e93; letter-spacing: 6px;
+    margin-top: 8px;
+  }
+
+  /* 色板 */
+  .palette {
+    display: flex; gap: 16px; flex-wrap: wrap;
+  }
+  .color-item {
+    flex: 1; min-width: 140px;
+  }
+  .color-swatch {
+    height: 80px; border-radius: 10px;
+    margin-bottom: 10px;
+    border: 1px solid rgba(0,0,0,0.06);
+  }
+  .color-name {
+    font-size: 13px; font-weight: 600;
+  }
+  .color-hex {
+    font-size: 12px; color: #8e8e93;
+    font-family: "Cascadia Code", Consolas, monospace;
+    margin-top: 2px;
+  }
+
+  /* 尺寸演示 */
+  .size-demo {
+    display: flex; align-items: flex-end; gap: 30px;
+    padding: 20px 0;
+  }
+  .size-item { text-align: center; }
+  .size-item .icon-box { margin: 0 auto 10px; }
+  .size-item .label {
+    font-size: 11px; color: #8e8e93;
+    font-family: "Cascadia Code", Consolas, monospace;
+  }
+
+  /* Popper 应用示意 */
+  .popper-demo {
+    background: linear-gradient(180deg, #282a36, #1a1c26);
+    border-radius: 14px;
+    padding: 24px;
+    color: #e8eaf0;
+    max-width: 380px;
+    margin: 0 auto;
+  }
+  .popper-demo .row1 {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 16px;
+  }
+  .popper-demo .icon-box {
+    width: 26px; height: 26px; border-radius: 7px;
+    background: #fff;
+  }
+  .popper-demo .icon-box svg { width: 14px; height: 14px; }
+  .popper-demo .brand { font-size: 14px; font-weight: 600; flex: 1; }
+
+  /* 技术参数 */
+  .tech-table {
+    width: 100%; border-collapse: collapse;
+    font-size: 13px;
+  }
+  .tech-table th, .tech-table td {
+    text-align: left; padding: 10px 12px;
+    border-bottom: 1px solid #e8e8ed;
+  }
+  .tech-table th {
+    color: #8e8e93; font-weight: 500; font-size: 12px;
+  }
+  .tech-table td code {
+    background: #f5f5f7; padding: 2px 6px; border-radius: 4px;
+    font-family: "Cascadia Code", Consolas, monospace; font-size: 12px;
+  }
+</style>
+</head>
+<body>
+
+<!-- 封面 -->
+<div class="cover">
+  <h1>简译 Jianyi</h1>
+  <div class="sub">BRAND IDENTITY GUIDELINES</div>
+  <div class="meta">
+    <div>版本 <b>v1.0</b></div>
+    <div>日期 <b>2026-11-08</b></div>
+    <div>状态 <b>最终方案</b></div>
+    <div>方案 <b>02 · 双语小窗</b></div>
+  </div>
+</div>
+
+<!-- 1. 设计理念 -->
+<div class="section">
+  <div class="section-num">01</div>
+  <h2>设计理念</h2>
+  <div class="section-desc">
+    「双语小窗」——两个并排的小方块代表两种语言，中间箭头表示转换。极简几何，开发者工具感强，纯黑图标适配任意主题。
+  </div>
+  <div class="card">
+    <div style="display:flex; align-items:center; gap:40px; padding: 20px 0;">
+      <div class="icon-box icon-dark" style="width:100px; height:100px; border-radius:24px;">
+        <svg viewBox="0 0 28 28" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round">
+          <rect x="3" y="8" width="8" height="12" rx="2"/>
+          <rect x="17" y="8" width="8" height="12" rx="2"/>
+          <path d="M12 14h3"/>
+          <path d="M14.5 12l2 2-2 2"/>
+        </svg>
+      </div>
+      <div style="flex:1;">
+        <h3 style="font-size:18px; margin-bottom:10px;">符号解析</h3>
+        <p style="font-size:14px; color:#515154; line-height:1.8;">
+          <b>左方块</b> = 源语言（英文）<br>
+          <b>右方块</b> = 目标语言（中文）<br>
+          <b>中间箭头</b> = 悬停即译、即时转换<br>
+          整体形态 = 一扇小窗，透过它看两种语言
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 2. 图标变体 -->
+<div class="section">
+  <div class="section-num">02</div>
+  <h2>图标变体</h2>
+  <div class="section-desc">三种变体适配不同场景：深色背景用反白、浅色背景用纯黑、品牌强调用渐变。</div>
+  <div class="row cols-3">
+    <div class="card">
+      <div class="card-label">标准 · 深色</div>
+      <div class="logo-showcase">
+        <div class="icon-box icon-dark">
+          <svg viewBox="0 0 28 28" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round">
+            <rect x="3" y="8" width="8" height="12" rx="2"/>
+            <rect x="17" y="8" width="8" height="12" rx="2"/>
+            <path d="M12 14h3"/>
+            <path d="M14.5 12l2 2-2 2"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label">标准 · 浅色</div>
+      <div class="logo-showcase">
+        <div class="icon-box icon-light">
+          <svg viewBox="0 0 28 28" fill="none" stroke="#1d1d1f" stroke-width="2" stroke-linecap="round">
+            <rect x="3" y="8" width="8" height="12" rx="2"/>
+            <rect x="17" y="8" width="8" height="12" rx="2"/>
+            <path d="M12 14h3"/>
+            <path d="M14.5 12l2 2-2 2"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label">品牌强调 · 渐变</div>
+      <div class="logo-showcase">
+        <div class="icon-box icon-accent">
+          <svg viewBox="0 0 28 28" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round">
+            <rect x="3" y="8" width="8" height="12" rx="2"/>
+            <rect x="17" y="8" width="8" height="12" rx="2"/>
+            <path d="M12 14h3"/>
+            <path d="M14.5 12l2 2-2 2"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 3. 字标 -->
+<div class="section">
+  <div class="section-num">03</div>
+  <h2>字标</h2>
+  <div class="section-desc">中文「简译」+ 英文 JIANYI，字距宽松，体现极简气质。</div>
+  <div class="row cols-2">
+    <div class="card">
+      <div class="card-label">中文组合</div>
+      <div class="wordmark-box">
+        <div class="wordmark-cn">简译</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label">英文组合</div>
+      <div class="wordmark-box">
+        <div class="wordmark-en" style="font-size:24px; letter-spacing:8px;">JIANYI</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 4. 配色 -->
+<div class="section">
+  <div class="section-num">04</div>
+  <h2>配色系统</h2>
+  <div class="section-desc">主色为中性黑白灰，品牌强调色为蓝紫渐变（与 Popper UI 一致）。</div>
+  <div class="card">
+    <div class="palette">
+      <div class="color-item">
+        <div class="color-swatch" style="background:#1d1d1f;"></div>
+        <div class="color-name">Ink 墨色</div>
+        <div class="color-hex">#1D1D1F</div>
+      </div>
+      <div class="color-item">
+        <div class="color-swatch" style="background:#8e8e93;"></div>
+        <div class="color-name">Gray 灰</div>
+        <div class="color-hex">#8E8E93</div>
+      </div>
+      <div class="color-item">
+        <div class="color-swatch" style="background:#f5f5f7;"></div>
+        <div class="color-name">Cloud 云白</div>
+        <div class="color-hex">#F5F5F7</div>
+      </div>
+      <div class="color-item">
+        <div class="color-swatch" style="background:linear-gradient(135deg,#6b8cff,#9b6bff);"></div>
+        <div class="color-name">Brand 品牌渐变</div>
+        <div class="color-hex">#6B8CFF → #9B6BFF</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 5. 尺寸规范 -->
+<div class="section">
+  <div class="section-num">05</div>
+  <h2>尺寸规范</h2>
+  <div class="section-desc">最小使用尺寸：托盘图标 16px、应用图标 32px、品牌展示 80px。</div>
+  <div class="card">
+    <div class="size-demo">
+      <div class="size-item">
+        <div class="icon-box icon-dark" style="width:16px; height:16px; border-radius:4px;">
+          <svg viewBox="0 0 28 28" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round">
+            <rect x="3" y="8" width="8" height="12" rx="2"/>
+            <rect x="17" y="8" width="8" height="12" rx="2"/>
+            <path d="M12 14h3"/>
+            <path d="M14.5 12l2 2-2 2"/>
+          </svg>
+        </div>
+        <div class="label">16px 托盘</div>
+      </div>
+      <div class="size-item">
+        <div class="icon-box icon-dark" style="width:32px; height:32px; border-radius:8px;">
+          <svg viewBox="0 0 28 28" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round">
+            <rect x="3" y="8" width="8" height="12" rx="2"/>
+            <rect x="17" y="8" width="8" height="12" rx="2"/>
+            <path d="M12 14h3"/>
+            <path d="M14.5 12l2 2-2 2"/>
+          </svg>
+        </div>
+        <div class="label">32px 任务栏</div>
+      </div>
+      <div class="size-item">
+        <div class="icon-box icon-dark" style="width:64px; height:64px; border-radius:16px;">
+          <svg viewBox="0 0 28 28" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round">
+            <rect x="3" y="8" width="8" height="12" rx="2"/>
+            <rect x="17" y="8" width="8" height="12" rx="2"/>
+            <path d="M12 14h3"/>
+            <path d="M14.5 12l2 2-2 2"/>
+          </svg>
+        </div>
+        <div class="label">64px 应用</div>
+      </div>
+      <div class="size-item">
+        <div class="icon-box icon-dark" style="width:96px; height:96px; border-radius:24px;">
+          <svg viewBox="0 0 28 28" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round">
+            <rect x="3" y="8" width="8" height="12" rx="2"/>
+            <rect x="17" y="8" width="8" height="12" rx="2"/>
+            <path d="M12 14h3"/>
+            <path d="M14.5 12l2 2-2 2"/>
+          </svg>
+        </div>
+        <div class="label">96px 展示</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 6. Popper 应用示意 -->
+<div class="section">
+  <div class="section-num">06</div>
+  <h2>Popper 顶栏应用</h2>
+  <div class="section-desc">新 Logo 在 Popper 顶栏中的实际效果。</div>
+  <div class="card">
+    <div class="popper-demo">
+      <div class="row1">
+        <div class="icon-box icon-dark">
+          <svg viewBox="0 0 28 28" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round">
+            <rect x="3" y="8" width="8" height="12" rx="2"/>
+            <rect x="17" y="8" width="8" height="12" rx="2"/>
+            <path d="M12 14h3"/>
+            <path d="M14.5 12l2 2-2 2"/>
+          </svg>
+        </div>
+        <div class="brand">简译</div>
+        <div style="font-size:11px; color:#8e8e93;">设置</div>
+        <div style="font-size:11px; color:#8e8e93;">—</div>
+        <div style="width:34px; height:18px; border-radius:9px; background:linear-gradient(135deg,#4f7cff,#6b8cff); position:relative;">
+          <div style="position:absolute; top:2px; right:2px; width:14px; height:14px; border-radius:50%; background:#fff;"></div>
+        </div>
+      </div>
+      <div style="font-size:12px; color:#6e7387; margin-top:8px;">
+        通序翻译 | 锁序直译 | 悬注 | 常驻面板
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 7. 技术规范 -->
+<div class="section">
+  <div class="section-num">07</div>
+  <h2>技术参数</h2>
+  <div class="section-desc">SVG 路径、CSS 变量、代码命名。</div>
+  <div class="card">
+    <table class="tech-table">
+      <tr><th>项目</th><th>值</th></tr>
+      <tr><td>SVG viewBox</td><td><code>0 0 28 28</code></td></tr>
+      <tr><td>圆角</td><td><code>rect rx=2</code> / 图标容器 <code>rx=20%</code></td></tr>
+      <tr><td>描边宽度</td><td><code>stroke-width=2</code>（16px 时用 2.5）</td></tr>
+      <tr><td>主色 CSS 变量</td><td><code>--brand-ink: #1D1D1F</code></td></tr>
+      <tr><td>渐变 CSS 变量</td><td><code>--brand-gradient: linear-gradient(135deg, #6B8CFF, #9B6BFF)</code></td></tr>
+      <tr><td>代码命名空间</td><td><code>Jianyi.App</code></td></tr>
+      <tr><td>数据库路径</td><td><code>%LOCALAPPDATA%\Jianyi\</code></td></tr>
+      <tr><td>命名管道</td><td><code>\\.\pipe\Jianyi.LocalMt</code></td></tr>
+    </table>
+  </div>
+</div>
+
+</body>
+</html>

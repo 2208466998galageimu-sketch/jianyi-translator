@@ -1,0 +1,39 @@
+<Window x:Class="Thanslator.App.ToastWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="简译"
+        Icon="Assets/app.ico"
+        Width="320"
+        SizeToContent="Height"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        Topmost="True"
+        ShowInTaskbar="False"
+        ShowActivated="False"
+        ResizeMode="NoResize"
+        WindowStartupLocation="Manual"
+        Opacity="0"
+        TextOptions.TextFormattingMode="Display">
+    <Border Background="{StaticResource PopperBackgroundBrush}"
+            BorderBrush="{StaticResource PopperBorderBrush}"
+            BorderThickness="1"
+            CornerRadius="12"
+            Padding="14,12">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Image Width="22" Height="22" Source="Assets/app.png"
+                   RenderOptions.BitmapScalingMode="HighQuality"
+                   VerticalAlignment="Top" Margin="0,1,10,0" />
+            <StackPanel Grid.Column="1">
+                <TextBlock Text="简译" FontWeight="SemiBold" FontSize="12"
+                           Foreground="{StaticResource TextStrongBrush}" />
+                <TextBlock x:Name="MessageText" Margin="0,3,0,0" TextWrapping="Wrap"
+                           FontSize="12" Foreground="{StaticResource TextPrimaryBrush}" />
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>

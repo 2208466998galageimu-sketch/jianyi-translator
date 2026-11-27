@@ -1,0 +1,143 @@
+{
+  "entries": [
+    {
+      "sourceTerms": ["race condition", "race conditions"],
+      "replacements": {
+        "种族状况": "竞态条件",
+        "种族条件": "竞态条件"
+      }
+    },
+    {
+      "sourceTerms": ["legacy"],
+      "contextTerms": ["software", "system", "systems", "code", "service", "services"],
+      "replacements": {
+        "遗产": "遗留"
+      }
+    },
+    {
+      "sourceTerms": ["architecture"],
+      "contextTerms": ["software", "system", "systems", "code", "service", "services", "network"],
+      "replacements": {
+        "建筑": "架构"
+      }
+    },
+    {
+      "sourceTerms": ["token", "tokens"],
+      "contextTerms": ["model", "models", "language", "tokenizer", "LLM"],
+      "replacements": {
+        "符号": "词元"
+      }
+    },
+    {
+      "sourceTerms": ["worker", "workers"],
+      "contextTerms": ["process", "processes", "thread", "threads", "queue", "queues", "server", "servers"],
+      "replacements": {
+        "工人": "工作进程"
+      }
+    },
+    {
+      "sourceTerms": ["rate limit", "rate limited", "rate limiting"],
+      "replacements": {
+        "费率是有限的": "被限流",
+        "速率有限": "被限流",
+        "速率是有限的": "被限流"
+      }
+    },
+    {
+      "sourceTerms": ["client", "clients"],
+      "contextTerms": ["server", "servers", "HTTP", "TCP", "software", "API", "connection", "connected"],
+      "replacements": {
+        "客户": "客户端"
+      }
+    },
+    {
+      "sourceTerms": ["schema version"],
+      "replacements": {
+        "模式版本": "架构版本",
+        "计划版本": "架构版本"
+      }
+    },
+    {
+      "sourceTerms": ["documentation"],
+      "contextTerms": ["software", "API", "code", "server", "application", "library"],
+      "replacements": {
+        "文件": "文档"
+      }
+    },
+    {
+      "sourceTerms": ["locally"],
+      "contextTerms": ["software", "model", "models", "computer", "device", "server", "data"],
+      "replacements": {
+        "在当地": "本地"
+      }
+    },
+    {
+      "sourceTerms": ["sent"],
+      "contextTerms": ["request", "requests", "packet", "packets", "server", "data", "message", "messages"],
+      "replacements": {
+        "寄给": "发送给"
+      }
+    },
+    {
+      "sourceTerms": ["pull request", "pull requests"],
+      "replacements": {
+        "拉请求": "拉取请求",
+        "拉取要求": "拉取请求"
+      }
+    },
+    {
+      "sourceTerms": ["GitHub"],
+      "targetTerm": "GitHub",
+      "caseSensitive": true,
+      "wholeWord": true
+    },
+    {
+      "sourceTerms": ["OpenAI"],
+      "targetTerm": "OpenAI",
+      "caseSensitive": true,
+      "wholeWord": true
+    },
+    {
+      "sourceTerms": ["Anthropic"],
+      "targetTerm": "Anthropic",
+      "caseSensitive": true,
+      "wholeWord": true
+    },
+    {
+      "sourceTerms": ["Microsoft"],
+      "targetTerm": "微软",
+      "caseSensitive": true,
+      "wholeWord": true
+    },
+    {
+      "sourceTerms": ["Google"],
+      "targetTerm": "谷歌",
+      "caseSensitive": true,
+      "wholeWord": true
+    },
+    {
+      "sourceTerms": ["Windows"],
+      "targetTerm": "Windows",
+      "caseSensitive": true,
+      "wholeWord": true
+    },
+    {
+      "sourceTerms": ["Linux"],
+      "targetTerm": "Linux",
+      "caseSensitive": true,
+      "wholeWord": true
+    },
+    {
+      "sourceTerms": ["Docker"],
+      "targetTerm": "Docker",
+      "caseSensitive": true,
+      "wholeWord": true
+    },
+    {
+      "sourceTerms": ["Kubernetes"],
+      "targetTerm": "Kubernetes",
+      "caseSensitive": true,
+      "wholeWord": true
+    }
+  ]
+}

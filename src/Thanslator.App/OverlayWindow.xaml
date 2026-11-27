@@ -1,0 +1,145 @@
+<Window x:Class="Thanslator.App.OverlayWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="简译 Overlay"
+        Icon="Assets/app.ico"
+        Width="380"
+        SizeToContent="Height"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        Topmost="True"
+        ShowInTaskbar="False"
+        ShowActivated="False"
+        ResizeMode="NoResize"
+        WindowStartupLocation="Manual"
+        TextOptions.TextFormattingMode="Display">
+    <Border Background="{StaticResource PopperBackgroundBrush}"
+            BorderBrush="{StaticResource PopperBorderBrush}"
+            BorderThickness="1"
+            CornerRadius="12"
+            Padding="14">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Image Width="10"
+                           Height="10"
+                           Source="Assets/app.png"
+                           RenderOptions.BitmapScalingMode="HighQuality"
+                           VerticalAlignment="Center" />
+                    <TextBlock x:Name="BadgeText"
+                               Margin="5,0,0,0"
+                               Text="本地词典"
+                               FontSize="10.5"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource BrandBlueBrush}"
+                               VerticalAlignment="Center" />
+                </StackPanel>
+                <Button x:Name="CloseButton"
+                        Style="{StaticResource CloseButton}"
+                        Content="×"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Visibility="Collapsed"
+                        Click="CloseButton_Click" />
+            </Grid>
+
+            <ScrollViewer Grid.Row="1"
+                          MaxHeight="480"
+                          Margin="0,8,0,0"
+                          VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled">
+                <StackPanel>
+                    <TextBlock x:Name="SourceText"
+                               TextWrapping="Wrap"
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               LineHeight="21"
+                               Foreground="{StaticResource TextStrongBrush}" />
+                    <TextBlock x:Name="DetailsText"
+                               Margin="0,7,0,0"
+                               TextWrapping="Wrap"
+                               FontSize="13"
+                               LineHeight="20"
+                               Foreground="{StaticResource TextPrimaryBrush}" />
+                    <Expander x:Name="KnowledgeDetails" Header="已提供领域术语" Visibility="Collapsed" Margin="0,8,0,0" Foreground="{StaticResource TextPrimaryBrush}">
+                        <TextBlock x:Name="KnowledgeText" TextWrapping="Wrap" FontSize="11" />
+                    </Expander>
+                    <WrapPanel x:Name="ResultActions" Margin="0,8,0,0" Visibility="Collapsed">
+                    <Button x:Name="CopyTranslationButton" Content="复制译文" Style="{StaticResource GhostButton}" Click="CopyTranslation_Click" />
+                    <Button x:Name="RetryButton" Content="重试" Visibility="Collapsed" Style="{StaticResource GhostButton}" Click="Retry_Click" />
+                    <Button x:Name="AdjustTranslationButton" Content="调整翻译" Style="{StaticResource GhostButton}"
+                            HorizontalAlignment="Left" Visibility="Collapsed" Margin="6,0,0,0" Click="AdjustTranslation_Click" />
+                    <Button Content="更多" Style="{StaticResource GhostButton}" Margin="6,0,0,0" Click="MoreResult_Click">
+                        <Button.ContextMenu><ContextMenu><MenuItem Header="复制原文" Click="CopyOriginal_Click" /><MenuItem Header="使用详情" Click="ResultDetails_Click" /></ContextMenu></Button.ContextMenu>
+                    </Button>
+                    </WrapPanel>
+                    <Expander x:Name="ResultDetails" Header="使用详情" Visibility="Collapsed" Margin="0,8,0,0" Foreground="{StaticResource TextPrimaryBrush}"><TextBlock x:Name="ResultDetailsText" TextWrapping="Wrap" FontSize="11" /></Expander>
+                    <Border x:Name="AdjustmentPanel" Visibility="Collapsed" Margin="0,8,0,0" Padding="10" CornerRadius="8"
+                            BorderBrush="{StaticResource PopperBorderBrush}" BorderThickness="1">
+                        <StackPanel>
+                            <Expander x:Name="TermAdjustment" Header="替换术语" Foreground="{StaticResource TextPrimaryBrush}"><StackPanel Margin="0,6,0,0">
+                            <ComboBox x:Name="TermSelector" SelectionChanged="TermSelector_Changed" Margin="0,0,0,5" />
+                            <ScrollViewer MaxHeight="150" VerticalScrollBarVisibility="Auto"><StackPanel x:Name="TermChoices" /></ScrollViewer>
+                            <CheckBox x:Name="SaveComboPreference" Content="设为此组合首选" Foreground="{StaticResource TextPrimaryBrush}" Margin="0,6" />
+                            <Button x:Name="ApplyTermButton" Content="使用所选译法" Style="{StaticResource GhostButton}"
+                                    HorizontalAlignment="Left" Click="ApplyTerm_Click" />
+                            </StackPanel></Expander>
+                            <Expander x:Name="TextAdjustment" Header="修改译文" Foreground="{StaticResource TextPrimaryBrush}" Margin="0,10,0,0"><StackPanel>
+                            <ComboBox x:Name="UnitSelector" SelectionChanged="UnitSelector_Changed" Margin="0,12,0,5" />
+                            <TextBox x:Name="AdjustedText" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="60" MaxHeight="140" MaxLength="32000"
+                                     VerticalScrollBarVisibility="Auto" Background="{StaticResource PopperBackgroundBrush}" Foreground="{StaticResource TextPrimaryBrush}" />
+                            <WrapPanel Margin="0,6,0,0">
+                                <Button Content="确认修改" Style="{StaticResource GhostButton}" Click="ConfirmEdit_Click" />
+                                <Button x:Name="UndoAdjustmentButton" Content="撤销本次调整" Style="{StaticResource GhostButton}"
+                                        IsEnabled="False" Margin="6,0,0,0" Click="UndoAdjustment_Click" />
+                            </WrapPanel>
+                            </StackPanel></Expander>
+                            <TextBlock x:Name="AdjustmentStatus" TextWrapping="Wrap" Foreground="{StaticResource TextDimBrush}" FontSize="11" Margin="0,6,0,0" />
+                        </StackPanel>
+                    </Border>
+                    <Expander x:Name="OcrOriginal" Header="识别原文（可校对）" Visibility="Collapsed" Margin="0,10,0,0"
+                              Foreground="{StaticResource TextDimBrush}" FontSize="11">
+                        <Expander.Template>
+                            <ControlTemplate TargetType="Expander">
+                                <StackPanel>
+                                    <ToggleButton Content="{TemplateBinding Header}" HorizontalAlignment="Left" Focusable="True"
+                                                  Style="{StaticResource SegItemSmall}"
+                                                  IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" />
+                                    <ContentPresenter x:Name="Body" Content="{TemplateBinding Content}" Visibility="Collapsed" />
+                                </StackPanel>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsExpanded" Value="True"><Setter TargetName="Body" Property="Visibility" Value="Visible" /></Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Expander.Template>
+                        <StackPanel Margin="0,6,0,0">
+                            <TextBox x:Name="OcrOriginalText" AcceptsReturn="True" TextWrapping="Wrap" MaxHeight="140" MaxLength="32000"
+                                     Padding="6" VerticalScrollBarVisibility="Auto" FontSize="12"
+                                     Background="{StaticResource PopperBackgroundBrush}" Foreground="{StaticResource TextPrimaryBrush}"
+                                     BorderBrush="{StaticResource PopperBorderBrush}" SelectionBrush="{StaticResource BrandBlueBrush}"
+                                     PreviewMouseLeftButtonDown="OcrOriginalText_PreviewMouseLeftButtonDown"
+                                     GotKeyboardFocus="OcrOriginalText_GotKeyboardFocus" />
+                            <Button x:Name="OcrTranslateButton" Content="按校对原文重新翻译" Style="{StaticResource GhostButton}" FontSize="11"
+                                    Margin="0,6,0,0" HorizontalAlignment="Left" Click="OcrTranslate_Click" />
+                        </StackPanel>
+                    </Expander>
+                </StackPanel>
+            </ScrollViewer>
+
+            <StackPanel Grid.Row="2" Margin="0,10,0,0">
+                <Button x:Name="ModelSettingsButton" Content="模型配置" Visibility="Collapsed"
+                        Style="{StaticResource GhostButton}" HorizontalAlignment="Left" Margin="0,0,0,6"
+                        Click="ModelSettingsButton_Click" />
+                <TextBlock x:Name="HintText" FontSize="10" Foreground="{StaticResource TextDimBrush}"
+                           TextWrapping="Wrap" />
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>

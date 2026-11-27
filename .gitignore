@@ -1,0 +1,65 @@
+bin/
+obj/
+.vs/
+*.user
+*.suo
+TestResults/
+*.db
+*.db-shm
+*.db-wal
+logs/
+dist/
+models/
+.local/
+assets/dictionary/*.sqlite
+assets/dictionary/*.sqlite-*
+assets/dictionary/ecdict.csv
+
+build/
+artifacts/
+
+# 运行期数据（设置库/日志/本地 MT 模型），便携目录，不入库
+data/
+
+# 升级前本机备份（含用户数据）
+backups/
+
+# GitHub source preparation: local credentials, caches and distributable binaries
+.env
+.env.*
+!.env.example
+!.env.sample
+.venv/
+__pycache__/
+*.py[cod]
+.nuget/
+.codex/
+.claude/
+.agents/
+*.log
+*.pem
+*.key
+*.pfx
+*.p12
+*.sqlite
+*.sqlite-*
+*.gguf
+*.onnx
+*.safetensors
+*.exe
+*.dll
+*.lib
+*.pdb
+*.zip
+*.7z
+*.tar.gz
+
+# Private working plans; originals stay local
+docs/commercialization-roadmap.md
+docs/distribution-and-monetization.md
+docs/superpowers/
+
+# Other model weight and tokenizer files
+*.bin
+*.spm
+*.model

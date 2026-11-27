@@ -1,0 +1,37 @@
+name: 问题反馈
+description: 提供可复现的问题，避免上传私人资料
+labels: [bug]
+body:
+  - type: input
+    id: version
+    attributes:
+      label: 简译版本与 Windows 版本
+    validations:
+      required: true
+  - type: dropdown
+    id: feature
+    attributes:
+      label: 出问题的部分
+      options:
+        - 划词或词典
+        - 本地翻译
+        - LLM 翻译或知识库
+        - OCR 或框选
+        - 模型下载或导入
+        - 安装或其他
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: 复现步骤及预期、实际结果
+      description: 使用可公开的最小例子。可附原文语言、目标语言和模型类型，不要提供密钥。
+    validations:
+      required: true
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: 发布前检查
+      options:
+        - label: 已去除密钥、私人原文、账号信息和未脱敏截图
+          required: true

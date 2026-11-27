@@ -1,0 +1,1309 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; frame-src 'self' about:; connect-src 'none'; form-action 'none'; base-uri 'none'">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>简译 · 更多设置</title>
+<style>
+:root{color-scheme:dark;font:14px/1.55 "Segoe UI","Microsoft YaHei UI",sans-serif;--bg:#14151c;--panel:#1c1e28;--raised:#252835;--edge:#383c50;--text:#f2f3fa;--muted:#b6bdd0;--accent:#bdc9ff;--green:#9ce5c2}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;padding:clamp(14px,5vh,70px) 14px;color:var(--text);background:radial-gradient(ellipse at 50% -35%,#3d4264,transparent 70%),var(--bg)}
+main{max-width:1160px;min-height:560px;margin:auto;display:grid;grid-template-columns:182px minmax(0,1fr);border:1px solid var(--edge);border-radius:18px;background:var(--panel);box-shadow:0 26px 90px #05060d70;overflow:hidden}
+.sidebar{display:flex;flex-direction:column;gap:24px;padding:18px 11px;background:#171923;border-right:1px solid var(--edge)}
+.sidebar .brand{padding:0 8px}
+.sidebar .sidebar-footer{padding:0 8px;margin-top:auto;line-height:1.5}
+.content{min-width:0}
+@media(max-width:650px){main{grid-template-columns:116px minmax(0,1fr);min-height:480px}.sidebar{padding:14px 6px}.sidebar .brand,.sidebar .sidebar-footer{padding:0 5px}}
+@media(max-width:420px){body{padding:8px 5px}main{grid-template-columns:102px minmax(0,1fr)}.workspace{padding:10px}.nav button{padding-inline:6px}}
+
+.brand{display:flex;align-items:center;gap:8px;font-weight:700}.mark{display:grid;place-items:center;width:24px;height:24px;border-radius:6px;background:#39405e;color:var(--accent)}
+.workspace{padding:clamp(16px,3.8vw,32px)}h1,h2,h3,p{margin:0}h1{font-size:27px;margin-bottom:19px}h2{font-size:17px}h3{font-size:14px}.muted,small{color:var(--muted)}.status{min-height:1.5em;color:var(--green);margin-top:12px}
+.grid{display:grid;grid-template-columns:minmax(260px, .9fr) minmax(0,1.5fr);gap:15px;align-items:start}
+.card{border:1px solid var(--edge);border-radius:13px;padding:15px;background:var(--raised);min-width:0}.stack{display:grid;gap:11px}
+.bar,.actions{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}.actions{justify-content:flex-end}
+button,select,input{font:inherit;color:inherit}button,select,input[type=text]{border:1px solid var(--edge);border-radius:8px;background:#303448;padding:7px 10px;min-width:0}button{cursor:pointer}button:hover{background:#3c435c}button:disabled{cursor:default;opacity:.45}button:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+select,input[type=text]{width:100%;background:#1a1c26}.primary{background:var(--accent);color:#191f38;border-color:transparent;font-weight:650}.primary:hover{background:#d0daff}.quiet{background:transparent}.small{padding:4px 7px;font-size:12px}
+input[type=checkbox],input[type=radio]{accent-color:#aabaff;margin:0}label.field{display:grid;gap:4px;color:var(--muted)}.field[hidden]{display:none}
+.library{display:flex;justify-content:space-between;align-items:center;gap:6px;padding:9px 0;border-top:1px solid var(--edge)}.library label,.candidate{display:flex;align-items:center;gap:8px;min-width:0}.library strong{font-size:13px}.library small,.candidate small{display:block}
+.order{display:flex;gap:4px;flex-shrink:0}.sample{background:#1a1c27;border:1px solid var(--edge);border-radius:9px;padding:11px 12px}.translation{font-size:18px;margin-top:5px;overflow-wrap:anywhere}
+.pair{color:var(--accent);font-size:12px}.badge{color:var(--green);font-size:12px}.result{border-top:1px solid var(--edge);padding-top:12px}.result details{margin-top:7px}summary{cursor:pointer;color:var(--accent)}
+.adjust{background:#1c1f2a;border:1px solid #4e5982;border-radius:10px;padding:11px}.candidate{border-top:1px solid var(--edge);padding:9px 2px;font-size:14px;cursor:pointer}.candidate span:first-of-type{flex:1}.candidate:has(input:checked){background:#323a55;border-radius:4px}.candidate small{font-size:12px}
+dialog{width:min(400px,calc(100% - 32px));border:1px solid var(--edge);border-radius:12px;padding:17px;background:var(--panel);color:var(--text)}dialog::backdrop{background:#080910bf}#name-error{color:#ffd1d6}#name-error:empty{display:none}
+@media(max-width:690px){.grid{grid-template-columns:minmax(0,1fr)}.workspace{padding:14px}.card{padding:12px}}
+.nav{display:grid;gap:19px;margin:0;padding:0;list-style:none}
+.nav-title{display:block;padding:0 8px 5px;color:var(--muted);font-size:12px;font-weight:650}
+.nav-children{display:grid;gap:3px;list-style:none;margin:0;padding:0 0 0 7px}
+.nav-children button{font-size:13px}
+.nav button{display:block;width:100%;text-align:left;background:transparent;border-color:transparent}
+.nav button:hover{background:#2c3043}.nav button[aria-current="page"]{background:#363e5c;border-color:#7d8dc6}
+.page-heading{margin-bottom:19px}.page-heading h1{margin:0}.page-heading button{white-space:nowrap}
+.model-wrap{padding:16px}.model-wrap iframe{display:block;width:100%;height:520px;border:0}.kb-table{overflow:auto}table{width:100%;border-collapse:collapse;text-align:left}th,td{font-size:13px;padding:9px 5px;border-bottom:1px solid var(--edge);vertical-align:top}.field input{min-width:0}#library-error,#term-error{color:#ffd1d6}#library-error:empty,#term-error:empty{display:none}
+.language-label{display:grid;gap:4px;text-align:left;overflow-wrap:anywhere}.language-label small{font-size:12px;font-weight:400}.direction-columns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.assistant-form{max-width:730px}.assistant-form .bar{align-items:baseline}.assistant-form input[type=file]{max-width:100%}.draft-origin{color:var(--muted);font-size:12px}.inline-error{color:#ffd1d6}
+@media(max-width:540px){.direction-columns{grid-template-columns:minmax(0,1fr)}}
+textarea{font:inherit;color:inherit;background:#1a1c26;border:1px solid var(--edge);border-radius:8px;padding:8px 10px;width:100%;min-height:92px;resize:vertical}
+.language-picks{margin:0;min-width:0;padding:9px 11px 11px;border:1px solid var(--edge);border-radius:8px}.language-picks legend{color:var(--muted)}.language-picks>div{display:flex;gap:9px 15px;flex-wrap:wrap}.language-picks label{display:flex;gap:6px;align-items:center}.draft-direction{min-width:12em}.versions{border-top:1px solid var(--edge);padding-top:10px}.revision{display:flex;gap:8px;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--edge)}
+#history-dialog{width:min(540px,calc(100% - 32px));max-height:calc(100% - 32px);overflow:auto}.versions{padding-top:0;border-top:0}
+.assistant-steps{display:flex;gap:6px 13px;flex-wrap:wrap;padding:0;margin:0 0 13px;list-style:none;font-size:12px;color:var(--muted)}
+.assistant-steps [aria-current="step"]{color:var(--accent);font-weight:650}.assistant-context{overflow-wrap:anywhere}.format-help{font-size:12px;color:var(--muted)}.format-help p{margin-top:5px}
+#trash-dialog{max-height:calc(100% - 32px);overflow:auto}#trash-choices:empty{display:none}
+.trash-options{display:grid;gap:6px;margin-top:5px}.trash-options label{display:flex;align-items:center;gap:8px;padding:6px 0;overflow-wrap:anywhere}
+.select-all{display:flex;align-items:center;gap:8px;justify-self:start;cursor:pointer}.combo-select-all{padding-block:1px 3px}
+.retention-form{max-width:600px}.retention-row{display:grid;grid-template-columns:minmax(0,1fr) 112px;align-items:center;gap:16px}
+.retention-row input{width:100%;border:1px solid var(--edge);border-radius:7px;background:#1a1c26;padding:7px 9px;text-align:center;color:var(--text)}
+.retention-card{gap:12px}.retention-card h2{margin-bottom:1px}
+.bounded-list{overflow-y:auto;scrollbar-gutter:stable;overscroll-behavior-y:contain}
+.bounded-list:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+[data-scroll-list] th{position:sticky;top:0;background:var(--raised);z-index:1}
+[data-scroll-list="libraries"]{display:grid;gap:11px;min-height:0}
+
+#native-toast:empty{display:none}#native-toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);max-width:70%;padding:10px 16px;background:#343041;border:1px solid #8e789c;border-radius:9px;z-index:30;white-space:pre-wrap}
+
+.status:empty{display:none}
+.sidebar,.content{scrollbar-width:thin;scrollbar-color:#4b5064 transparent}
+/* The rounded application surface is the complete native window. */
+html,body{height:100%;width:100%;overflow:hidden}
+body{padding:0;min-height:0;background:var(--panel)}
+body>main{width:100%;height:100%;min-height:0;max-width:none;margin:0;box-shadow:none}
+.sidebar{min-height:0;overflow-y:auto;overscroll-behavior:contain}
+.content{min-height:0;overflow-y:auto;overflow-x:hidden}
+
+.window-drag-strip{position:fixed;top:1px;left:182px;right:118px;height:24px;z-index:5}
+
+.window-controls{position:fixed;top:10px;right:12px;display:flex;gap:3px;z-index:6;app-region:no-drag;-webkit-app-region:no-drag}
+.window-controls button{display:grid;place-items:center;width:30px;height:27px;padding:0;border:0;border-radius:6px;background:transparent;color:var(--muted);font:18px/1 "Segoe UI",sans-serif;app-region:no-drag}
+.window-controls button:hover{background:#ffffff16;color:var(--text)}
+.window-controls button[data-window="close"]:hover{background:#b64452;color:white}
+.window-resize-edge{position:fixed;z-index:8;app-region:no-drag}
+.window-resize-edge[data-edge="n"]{top:0;left:16px;right:16px;height:5px;cursor:n-resize}
+.window-resize-edge[data-edge="s"]{bottom:0;left:16px;right:16px;height:5px;cursor:s-resize}
+.window-resize-edge[data-edge="w"]{left:0;top:16px;bottom:16px;width:5px;cursor:w-resize}
+.window-resize-edge[data-edge="e"]{right:0;top:16px;bottom:16px;width:5px;cursor:e-resize}
+.window-resize-edge[data-edge="nw"],.window-resize-edge[data-edge="ne"],.window-resize-edge[data-edge="sw"],.window-resize-edge[data-edge="se"]{width:14px;height:14px}
+.window-resize-edge[data-edge="nw"]{top:0;left:0;cursor:nw-resize}.window-resize-edge[data-edge="ne"]{top:0;right:0;cursor:ne-resize}
+.window-resize-edge[data-edge="sw"]{bottom:0;left:0;cursor:sw-resize}.window-resize-edge[data-edge="se"]{bottom:0;right:0;cursor:se-resize}
+.window-maximized>main{border-radius:0}.window-maximized .window-resize-edge{display:none}
+
+.preference-page textarea{min-height:64px}.preference-page [data-preference-rule]{border-top:1px solid var(--edge);padding-top:12px}.preference-page [data-pref-preview]{flex:1;min-width:0}
+.narrow{max-width:760px}.workspace,.model-wrap{padding:28px 30px}.model-wrap iframe{width:100%}.model-wrap{padding-top:28px}.sidebar{gap:17px}.nav{gap:15px}.sidebar-footer{margin-top:auto;text-align:left}.grid{grid-template-columns:minmax(210px,.65fr) minmax(0,1.7fr)}.combo-layout{display:grid;grid-template-columns:220px minmax(0,1fr);gap:15px}.time-input{display:flex;gap:5px}.time-input select{width:74px}.retention-row{grid-template-columns:minmax(0,1fr) 180px}.more-menu{position:relative}.more-menu>div{position:absolute;right:0;top:28px;z-index:10;display:grid;min-width:130px;padding:7px;background:var(--panel);border:1px solid var(--edge);border-radius:9px}.more-menu button{text-align:left}.more-menu summary{list-style:none;border:1px solid var(--edge);border-radius:8px;padding:6px 10px;color:var(--text)}.bulk-bar{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:#343c58;border-radius:8px}.bar>input{flex:1;min-width:140px;width:auto}.preference-rule{padding:12px 0;border-top:1px solid var(--edge)}.preference-rule label{flex:1;min-width:0;overflow-wrap:anywhere}.preference-page textarea{min-height:72px}.draft-filters{justify-content:flex-start}.kb-table input[type=text]{min-width:100px}.kb-table select{min-width:110px}.diff-list{padding:8px 0;font-size:12px}.diff-list li{overflow-wrap:anywhere}#info-dialog{width:min(640px,calc(100% - 32px));max-height:85vh;overflow:auto}#global-task{position:fixed;bottom:16px;right:22px;z-index:20;max-width:calc(100% - 220px);background:#303951;border:1px solid #7386b5;padding:10px 14px;border-radius:10px;box-shadow:0 4px 20px #0005}#global-task .actions{margin-top:5px}#global-task[hidden]{display:none}.field-error{color:#ffd1d6}details.card>summary{font-weight:600}.nav-children button{padding:6px 8px}.model-wrap[hidden]{display:none}
+@media(max-width:1050px){.grid,.combo-layout{grid-template-columns:minmax(0,1fr)}.workspace,.model-wrap{padding:25px 18px}.card{padding:13px}.sidebar{gap:16px}.kb-table th,.kb-table td{font-size:12px}}@media(max-width:800px){.sidebar{padding:14px 8px}.nav-title{font-size:11px}.nav-children button{font-size:12px}.retention-row{gap:8px}}
+.nav-children[hidden]{display:none}.nav>.nav-title{font-weight:650}.nav-title[aria-expanded="false"]::after{content:' ›';float:right}.nav-title[aria-expanded="true"]::after{content:' ⌄';float:right}.nav>li{min-width:0}.nav>li>.nav-title{color:var(--muted);font-size:12px;font-weight:650;padding:5px 8px}.sidebar .nav-children{padding-left:7px}
+.primary small{color:#303958}.combo-layout{align-items:start}.combo-layout>section:first-child{align-content:start}[data-scroll-list="combination-list"]{display:grid;gap:8px}.preference-page{max-width:760px}.sidebar-footer{border:0}
+</style>
+</head>
+<body>
+<div class="window-drag-strip" aria-hidden="true"></div>
+<div class="window-controls" aria-label="窗口操作">
+  <button type="button" data-window="minimize" aria-label="最小化" title="最小化">−</button>
+  <button type="button" data-window="maximize" aria-label="最大化" title="最大化">□</button>
+  <button type="button" data-window="close" aria-label="关闭更多设置" title="关闭">×</button>
+</div>
+<div class="window-resize-edge" data-edge="n" aria-hidden="true"></div>
+<div class="window-resize-edge" data-edge="s" aria-hidden="true"></div>
+<div class="window-resize-edge" data-edge="e" aria-hidden="true"></div>
+<div class="window-resize-edge" data-edge="w" aria-hidden="true"></div>
+<div class="window-resize-edge" data-edge="nw" aria-hidden="true"></div>
+<div class="window-resize-edge" data-edge="ne" aria-hidden="true"></div>
+<div class="window-resize-edge" data-edge="sw" aria-hidden="true"></div>
+<div class="window-resize-edge" data-edge="se" aria-hidden="true"></div>
+<div id="native-toast" role="status" aria-live="polite"></div>
+<div id="global-task" role="status" aria-live="polite" hidden></div>
+<dialog id="leave-dialog"><form method="dialog" class="stack"><h2>有未保存的更改</h2><div class="actions"><button value="stay" autofocus>继续编辑</button><button value="discard">放弃更改</button><button class="primary" value="save">保存并继续</button></div></form></dialog>
+<dialog id="info-dialog"><div class="stack"><div class="bar"><h2 id="info-title"></h2><button type="button" id="close-info">关闭</button></div><div id="info-body"></div></div></dialog>
+<main>
+<aside class="sidebar">
+  <div class="brand"><span class="mark" aria-hidden="true">译</span>简译</div>
+  <nav aria-label="简译导航">
+    <ul class="nav">
+      <li><span class="nav-title" id="translation-nav">翻译设置</span><ul class="nav-children" aria-labelledby="translation-nav">
+        <li><button type="button" data-page="translation">语言与翻译方式</button></li>
+        <li><button type="button" data-page="capture">取词与识图</button></li>
+        <li><button type="button" data-page="retention">结果显示</button></li>
+        <li><button type="button" data-page="preferences">翻译偏好</button></li>
+      </ul></li>
+      <li>
+        <span class="nav-title" id="knowledge-nav">知识库</span>
+        <ul class="nav-children" aria-labelledby="knowledge-nav">
+          <li><button type="button" data-page="knowledge" aria-current="page">知识库管理</button></li>
+          <li><button type="button" data-page="combinations">知识库组合</button></li>
+          <li><button type="button" data-page="assistant">导入与生成</button></li>
+          
+          <li><button type="button" data-page="trash">已删除内容</button></li>
+        </ul>
+      </li>
+      <li>
+        <span class="nav-title" id="models-nav">模型配置</span>
+        <ul class="nav-children" aria-labelledby="models-nav">
+          <li><button type="button" data-page="models" data-model="translation">翻译模型</button></li>
+          <li><button type="button" data-page="models" data-model="ocr">OCR 模型</button></li>
+          <li><button type="button" data-page="models" data-model="assistant">导入助手模型</button></li>
+        </ul>
+      </li>
+      <li><span class="nav-title" id="storage-nav">数据与存储</span><ul class="nav-children" aria-labelledby="storage-nav">
+        <li><button type="button" data-page="storage">下载与存储</button></li>
+        <li><button type="button" data-page="backup">备份与恢复</button></li>
+      </ul></li>
+    </ul>
+  </nav>
+  <button type="button" class="quiet sidebar-footer" id="about-button">帮助与关于</button>
+</aside>
+<div class="content">
+  <section class="workspace" id="app"></section>
+  <section class="model-wrap" id="model-wrap" hidden><button type="button" class="quiet" id="model-return" hidden>‹ 返回知识库导入助手</button><iframe id="model-frame" title="模型配置"></iframe></section>
+</div>
+</main>
+<dialog id="preset-dialog" aria-labelledby="name-title">
+<form id="preset-form" class="stack">
+  <h2 id="name-title">知识库组合名称</h2>
+  <label class="field">组合名称<input name="name" type="text" maxlength="28" required autofocus></label>
+  <p id="name-error" role="alert"></p>
+  <div class="actions"><button type="button" class="quiet" id="cancel-name">取消</button><button class="primary">保存组合</button></div>
+</form>
+</dialog>
+<dialog id="library-dialog" aria-labelledby="library-title">
+  <form id="library-form" class="stack">
+    <h2 id="library-title">新建知识库</h2>
+    <label class="field">知识库名称<input type="text" name="name" maxlength="32" required autofocus></label><label class="field" id="library-kind-field">语言分类<select name="kind"><option value="pair">双向语言对</option><option value="mixed">综合（多语言）</option></select></label>
+    <label class="select-all"><input type="checkbox" name="personal">个人常用词库</label><label class="field" id="library-direction-field">语言对<select name="direction"></select></label><p id="library-error" role="alert"></p>
+    <div class="actions"><button type="button" class="quiet" data-close="library-dialog">取消</button><button class="primary">保存</button></div>
+  </form>
+</dialog>
+<dialog id="term-dialog" aria-labelledby="term-title">
+  <form id="term-form" class="stack">
+    <h2 id="term-title">新增术语</h2>
+    <label class="field">原词或短语<input type="text" name="source" maxlength="120" required autofocus></label>
+    <label class="field">指定译法<input type="text" name="target" maxlength="120" required></label>
+    <label class="field">翻译方向<select name="direction"></select></label>
+    <label><input type="checkbox" name="enabled"> 启用词条</label><label class="field">备注<textarea name="note" maxlength="1000"></textarea></label><p id="term-error" role="alert"></p>
+    <div class="actions"><button type="button" class="quiet" data-close="term-dialog">取消</button><button class="primary">保存术语</button></div>
+  </form>
+</dialog>
+<dialog id="history-dialog" aria-labelledby="history-title">
+  <div class="stack"><div class="bar"><div><h2 id="history-title">版本记录</h2><small id="history-library"></small></div><button type="button" id="history-close" class="quiet" data-close="history-dialog" autofocus>关闭</button></div>
+    <div id="history-body"></div><p id="history-status" role="status"></p>
+  </div>
+</dialog>
+<dialog id="restore-dialog" aria-labelledby="restore-title">
+  <form id="restore-form" class="stack">
+    <h2 id="restore-title">恢复词条版本</h2><p id="restore-summary"></p>
+    <div class="actions"><button type="button" class="quiet" data-close="restore-dialog">取消</button><button class="primary">确认恢复</button></div>
+  </form>
+</dialog>
+<dialog id="trash-dialog" aria-labelledby="trash-title">
+  <form id="trash-confirm" class="stack">
+    <h2 id="trash-title"></h2><p id="trash-message"></p><div id="trash-choices"></div>
+    <div id="trash-actions" class="actions"></div>
+  </form>
+</dialog>
+<script>
+
+const pendingNative=new Map();let nativeRevision=0,nativeSaved={libraries:[],presets:[],active:null,trashSchema:1},nativeBusy=true,readyModels=null;
+window.nativeCall=(action,data={})=>new Promise((resolve,reject)=>{
+ const id=crypto.randomUUID();pendingNative.set(id,{resolve,reject});
+ chrome.webview.postMessage({id,action,data});
+});
+chrome.webview.addEventListener('message',event=>{
+ const value=event.data;
+ if(value.type==='window-state'){
+   document.body.classList.toggle('window-maximized',value.maximized);
+   const button=document.querySelector('[data-window="maximize"]');
+   button.textContent=value.maximized?'❐':'□';button.title=button.ariaLabel=value.maximized?'还原':'最大化';return;
+ }
+ if(value.type==='model-progress'){if(task?.active)showGlobalTask(value.message);document.querySelector('#model-frame')?.contentWindow.showNativeProgress?.(value.message);return;}
+ if(value.type==='translation-selection'){
+   readyModels=value.state;document.querySelector('#model-frame').contentWindow.syncNativeModels?.(readyModels,true);return;
+ }
+ const pending=pendingNative.get(value.id);if(!pending)return;
+ pendingNative.delete(value.id);value.ok?pending.resolve(value.value):pending.reject(Error(value.value||'操作失败。'));
+});
+for(const name of ['click','change','submit','keydown'])document.addEventListener(name,event=>{
+ if(event.target.closest?.('.window-controls,.window-resize-edge'))return;
+ if(!nativeBusy)return;
+ event.preventDefault();event.stopImmediatePropagation();
+},true);
+window.openNativePage=page=>{
+ if(page.startsWith('models/')){
+   ui.page='models';ui.modelPage=page.split('/')[1];ui.helperBack=false;openPage('models');requestModelPage();
+ }else openPage(page);
+};
+async function bootstrapNative(){
+ try{
+  const value=await nativeCall('bootstrap');
+  Object.assign(model,value.document);nativeSaved=structuredClone(model);nativeRevision=value.revision;
+  preferenceState=value.preferences;
+  savedRetention=value.retention;Object.assign(retentionDraft,value.retention);
+  ui.library=liveLibraries()[0]?.id||null;ui.assistantReady=value.models.configs.some(c=>c.kind==='assistant');
+  basicSettings=value.basic||basicSettings;basicSaved={...basicSettings};basicDirty=false;
+  readyModels=value.models;document.querySelector('#model-frame').contentWindow.syncNativeModels?.(readyModels);
+  nativeBusy=false;openNativePage(value.page);
+ }catch(error){nativeBusy=false;app.innerHTML='<p role="alert">'+esc(error.message)+'</p>';}
+}
+
+let nativeToastTimer;
+function nativeToast(message){const node=document.getElementById('native-toast');node.textContent=message;clearTimeout(nativeToastTimer);nativeToastTimer=setTimeout(()=>node.textContent='',6000);}
+window.addEventListener('unhandledrejection',event=>{event.preventDefault();nativeToast(event.reason?.message||'操作失败，请重试。');});
+
+document.querySelector('.window-controls').addEventListener('click',event=>{
+ const button=event.target.closest('[data-window]');if(button)nativeCall('window',{command:button.dataset.window});
+});
+// Window dragging uses a movement threshold so clicks keep their original action.
+function attachWindowDragging(doc){
+ let gesture=null,frame=0,suppressClick=false;
+ const excluded='input,textarea,select,[contenteditable]:not([contenteditable="false"]),.window-resize-edge';
+ doc.addEventListener('pointerdown',event=>{
+   suppressClick=false;
+   if(event.button!==0||!event.isPrimary||event.target.closest(excluded))return;
+   gesture={id:event.pointerId,x:event.screenX,y:event.screenY,target:event.target,moved:false};
+   const bounds=doc.defaultView.frameElement?.getBoundingClientRect();
+   nativeCall('window',{command:'drag-start',x:event.clientX+(bounds?.left||0),y:event.clientY+(bounds?.top||0)});
+ },true);
+ doc.addEventListener('pointermove',event=>{
+   if(!gesture||event.pointerId!==gesture.id)return;
+   if(!gesture.moved){
+     if(Math.hypot(event.screenX-gesture.x,event.screenY-gesture.y)<6)return;
+     gesture.moved=true;suppressClick=true;
+     doc.defaultView.getSelection()?.removeAllRanges();
+     gesture.target.setPointerCapture(event.pointerId);
+   }
+   event.preventDefault();
+   if(!frame)frame=doc.defaultView.requestAnimationFrame(()=>{frame=0;if(gesture?.moved)nativeCall('window',{command:'drag-move'});});
+ },true);
+ const end=event=>{
+   if(!gesture||event.pointerId!==gesture.id)return;
+   if(frame){doc.defaultView.cancelAnimationFrame(frame);frame=0;}
+   if(gesture.moved){event.preventDefault();nativeCall('window',{command:'drag-move'});}
+   gesture=null;nativeCall('window',{command:'drag-end'});
+ };
+ doc.addEventListener('pointerup',end,true);
+ doc.addEventListener('pointercancel',end,true);
+ doc.addEventListener('lostpointercapture',end,true);
+ doc.addEventListener('selectstart',event=>{if(gesture&&!event.target.closest(excluded))event.preventDefault();},true);
+ doc.addEventListener('dragstart',event=>{if(gesture)event.preventDefault();},true);
+ doc.addEventListener('click',event=>{if(suppressClick){suppressClick=false;event.preventDefault();event.stopImmediatePropagation();}},true);
+}
+attachWindowDragging(document);
+document.getElementById('model-frame').addEventListener('load',()=>attachWindowDragging(document.getElementById('model-frame').contentDocument));
+document.querySelectorAll('.window-resize-edge').forEach(edge=>edge.addEventListener('pointerdown',event=>{
+ if(event.button!==0)return;event.preventDefault();nativeCall('window',{command:'resize',edge:edge.dataset.edge});
+}));
+
+const baseDirection='en>zh-Hans';
+const languageLabels={'en':'英语','zh-Hans':'简体中文',ja:'日语',ko:'韩语',fr:'法语',de:'德语',es:'西班牙语'};
+const directions=Object.keys(languageLabels).flatMap(from=>Object.keys(languageLabels).filter(to=>to!==from).map(to=>from+'>'+to));
+const activeItems=items=>items.filter(item=>!item.deletedAt);
+
+
+const model={presets:[],active:null,libraries:[],trashSchema:1};
+const ui={librarySearch:'',trashSearch:'',selectedTerms:new Set(),draftFilter:'all',page:'knowledge',modelPage:'translation',library:null,filter:'all',renaming:false,termIndex:-1,search:'',naming:null,note:'',assistantReady:false,helperBack:false,assistantMode:'import',draft:null,comboDrafts:new Map(),createFromAssistant:false,assistantStep:'setup',restore:null,generate:{topic:'',details:'',languages:['en','zh-Hans']},importFile:null,trashAction:null};
+let importRun=0;
+const app=document.querySelector('#app');
+const dialog=document.querySelector('#preset-dialog');
+const form=document.querySelector('#preset-form');
+const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const button=(label,action,value='',cls='',disabled=false)=>'<button type="button" class="'+cls+'" data-action="'+action+'" data-value="'+esc(value)+'"'+(disabled?' disabled':'')+'>'+label+'</button>';
+const byId=id=>model.libraries.find(item=>item.id===id);
+const liveLibraries=()=>activeItems(model.libraries);
+const livePresets=()=>activeItems(model.presets);
+const normalize=text=>text.trim().replace(/\s+/g,' ').toLowerCase();
+function directionText(direction){return direction.split('>').map(code=>languageLabels[code]||code).join(' → ');}
+function directionOptions(values,selected){return values.map(value=>'<option value="'+esc(value)+'" '+(value===selected?'selected':'')+'>'+esc(directionText(value))+'</option>').join('');}
+const languageOrder=Object.keys(languageLabels);
+function reverseDirection(value){return value.split('>').reverse().join('>');}
+function pairKey(value){return value.split('>').sort((a,b)=>languageOrder.indexOf(a)-languageOrder.indexOf(b)).join('>');}
+const pairs=[...new Set(directions.map(pairKey))];
+function pairText(value){return pairKey(value).split('>').map(code=>languageLabels[code]||code).join(' ↔ ');}
+function pairOptions(values,selected){return values.map(value=>'<option value="'+esc(value)+'" '+(value===selected?'selected':'')+'>'+esc(pairText(value))+'</option>').join('');}
+function allowedDirections(library){return library.kind==='mixed'?directions:[library.direction,reverseDirection(library.direction)];}
+function libraryPairs(library){
+  const entries=library.kind==='mixed'?library.terms.map(item=>item.direction).filter(Boolean):[library.direction];
+  return [...new Set(entries.map(pairKey))];
+}
+function libraryLabel(library){return library.kind==='mixed'?'综合（多语言）':pairText(library.direction);}
+function entryDirection(item,library){return item.direction||library.direction;}
+function matchesFilter(library){return ui.filter==='all'||(ui.filter==='mixed'?library.kind==='mixed':libraryPairs(library).includes(ui.filter));}
+const preset=()=>livePresets().find(item=>item.id===(ui.editCombo||model.active))||livePresets()[0]||null;
+function editablePreset(){
+  const current=preset();
+  if(!current)return null;
+  if(!ui.comboDrafts.has(current.id))ui.comboDrafts.set(current.id,{...current,ids:[...current.ids]});
+  return ui.comboDrafts.get(current.id);
+}
+function comboDirty(current,draft=ui.comboDrafts.get(current.id)){
+  return !!draft&&(current.name!==draft.name||current.mode!==draft.mode||current.ids.join('|')!==draft.ids.join('|'));
+}
+function ordered(current){
+  const enabled=current.ids.map(byId).filter(item=>item&&!item.deletedAt);
+  if(current.mode==='manual')return enabled;
+  return enabled.sort((a,b)=>Number(!!a.personal)-Number(!!b.personal)||b.hits-a.hits);
+}
+function persist(note=''){
+ if(nativeBusy)return Promise.resolve(false);
+ const document=structuredClone(model);nativeBusy=true;
+ return nativeCall('save-knowledge',{document,revision:nativeRevision}).then(revision=>{
+   nativeRevision=revision;nativeSaved=document;ui.note=note;return true;
+ }).catch(error=>{for(const key of Object.keys(model))delete model[key];Object.assign(model,structuredClone(nativeSaved));ui.note=error.message;return false;})
+ .finally(()=>{nativeBusy=false;render();});
+}
+const retentionDefaults={shortWords:10,mediumWords:50,shortSeconds:90,mediumSeconds:300,longSeconds:600};
+
+function retentionValid(values){
+  return Number.isInteger(values.shortWords)&&values.shortWords>=1&&values.shortWords<=10000
+    &&Number.isInteger(values.mediumWords)&&values.mediumWords>values.shortWords&&values.mediumWords<=10000
+    &&['shortSeconds','mediumSeconds','longSeconds'].every(key=>Number.isInteger(values[key])&&values[key]>=1&&values[key]<=86400);
+}
+function loadRetention(){return {...retentionDefaults};}
+let savedRetention=loadRetention();
+const retentionDraft={...savedRetention};
+function retentionValues(form){
+ const data=new FormData(form),value={shortWords:Number(data.get('shortWords')),mediumWords:Number(data.get('mediumWords'))};
+ for(const key of ['short','medium','long'])value[key+'Seconds']=Math.round(Number(data.get(key+'Seconds'))*Number(data.get(key+'Unit')||1));
+ return value;
+}
+function retentionView(){
+ const length=(label,name)=>'<label class="retention-row"><span>'+label+'</span><input name="'+name+'" type="number" min="1" max="10000" value="'+esc(retentionDraft[name])+'" required></label>';
+ const ranges=['1–'+retentionDraft.shortWords,(Number(retentionDraft.shortWords)+1)+'–'+retentionDraft.mediumWords,(Number(retentionDraft.mediumWords)+1)+' 以上'];
+ const time=(name,label,index)=>'<label class="retention-row"><span>'+label+' · '+ranges[index]+'</span><span class="time-input"><input name="'+name+'Seconds" type="number" min="0.01" step="any" value="'+esc(retentionDraft[name+'Seconds'])+'" required><select name="'+name+'Unit" aria-label="'+label+'时间单位"><option value="1">秒</option><option value="60">分钟</option></select></span></label>';
+ return pageHeading('结果显示')+'<section class="card stack narrow"><h2>呈现方式</h2><form id="surface-form" class="actions"><select name="surfaceMode" aria-label="结果呈现方式"><option value="tooltip" '+(basicSettings.surfaceMode==='tooltip'?'selected':'')+'>悬注</option><option value="panel" '+(basicSettings.surfaceMode==='panel'?'selected':'')+'>常驻</option></select><button class="primary">保存</button></form></section><form id="retention-form" class="stack retention-form" style="margin-top:15px">'
+ +'<section class="card stack retention-card"><div class="bar"><h2>框选内容长度</h2>'+button('计数方式','length-help','','quiet small')+'</div>'+length('短 / 中分界','shortWords')+length('中 / 长分界','mediumWords')+'</section>'
+ +'<section class="card stack retention-card"><h2>框选结果保留时间</h2>'+time('short','短内容',0)+time('medium','中内容',1)+time('long','长内容',2)+'</section>'
+ +'<div class="actions">'+button('恢复默认','reset-retention','','quiet')+button('取消更改','cancel-retention','','quiet')+'<button class="primary">保存</button></div></form>';
+}
+async function commitRetention(values){
+ if(!retentionValid(values)){ui.note='请输入有效的正整数，中等内容词数上限须大于短内容词数上限。';render();return;}
+ try{await nativeCall('retention',{values});savedRetention={...values};Object.assign(retentionDraft,values);ui.note='已保存框选结果显示时长。';}
+ catch(error){ui.note=error.message;}render();
+}
+app.addEventListener('input',event=>{
+  if(event.target.id==='term-search'){ui.search=event.target.value;const position=event.target.selectionStart;render('#term-search');document.getElementById('term-search').setSelectionRange(position,position);return;}
+  if(event.target.form?.id==='retention-form')Object.assign(retentionDraft,retentionValues(event.target.form));
+});
+app.addEventListener('submit',event=>{
+  if(event.target.id!=='retention-form')return;
+  event.preventDefault();
+  const values=retentionValues(event.target);
+  commitRetention(values);
+});
+
+function settings(){
+  const saved=preset(),current=editablePreset();
+  if(!saved)return '<section class="card stack assistant-form"><p>暂无知识库组合。</p>'+button('新建组合','new','','primary')+'</section>';
+  const dirty=comboDirty(saved,current);
+  const enabled=ordered(current);
+  const rows=[...enabled,...liveLibraries().filter(item=>!current.ids.includes(item.id))].map(item=>{
+    const index=enabled.indexOf(item);
+    return '<div class="library"><label><input name="library" type="checkbox" value="'+item.id+'" '+(index>=0?'checked':'')+'><span><strong>'+esc(item.name)+'</strong><small>'
+      +(item.personal&&current.mode==='frequency'?'个人兜底 · ':'')+esc(libraryLabel(item))+' · 近 30 天 '+item.hits+' 次'+(index===0?' · 首选库':'')+'</small></span></label>'
+      +(current.mode==='manual'&&index>=0?'<span class="order">'+button('上移','up',item.id,'small quiet',index===0)+button('下移','down',item.id,'small quiet',index===enabled.length-1)+'</span>':'')+'</div>';
+  }).join('');
+  return '<div class="combo-layout"><section class="card stack"><div class="bar"><h2>知识库组合</h2>'+button('新建','new','empty','small primary')+'</div><div data-scroll-list="combination-list">'+livePresets().map(item=>button('<strong>'+esc(item.name)+'</strong><small>'+item.ids.filter(id=>byId(id)&&!byId(id).deletedAt).length+' 个知识库'+(item.id===model.active?' · 使用中':'' )+'</small>','select-combo',item.id,'language-label '+(item.id===current.id?'primary':'quiet'))).join('')+'</div></section><section class="card stack assistant-form"><div class="bar"><h2>组合设置</h2><div class="actions">'+button('另存组合','new','','small quiet')+button('批量删除','batch-combo','','small quiet')+'</div></div>'
+    +'<label class="field">当前组合<select id="preset">'+livePresets().map(item=>'<option value="'+esc(item.id)+'" '+(item.id===current.id?'selected':'')+'>'+esc(item.name)+(comboDirty(item)?' · 未保存':'')+'</option>').join('')+'</select></label>'
+    +'<label class="field">知识库优先顺序<select id="order"><option value="frequency" '+(current.mode==='frequency'?'selected':'')+'>按使用频率</option><option value="manual" '+(current.mode==='manual'?'selected':'')+'>手动顺序</option></select></label>'
+    +'<h3>包含的知识库</h3>'
+    +'<label class="select-all combo-select-all"><input id="combo-select-all" type="checkbox" aria-label="全选知识库" '+(liveLibraries().length?'':'disabled')+'>全选</label>'
+    +'<div data-scroll-list="combo-libraries" role="region" aria-label="组合中的知识库">'+rows+'</div>'
+    +'<div class="bar"><small role="status">'+(dirty?'有未保存的修改':'已保存')+'</small><div class="actions">'+button('重命名组合','rename','','quiet')+button('删除组合','trash-combo',saved.id,'quiet')+button('取消更改','cancel-combination','','quiet')+button('用于翻译','activate-combination',saved.id,'quiet',dirty||saved.id===model.active)+button('保存','save-combination','','primary',!dirty)+'</div></div></section></div>';
+}
+function visibleTerms(library){
+ return library.terms.map((entry,index)=>({entry,index})).filter(({entry})=>(ui.filter==='all'||ui.filter==='mixed'||pairKey(entryDirection(entry,library))===ui.filter)&&normalize(entry.source+' '+entry.target+' '+(entry.note||'')).includes(normalize(ui.search)));
+}
+function invalidEnabled(term){return term&&Object.hasOwn(term,'enabled')&&typeof term.enabled!=='boolean';}
+function invalidTermStates(){
+ return model.libraries.flatMap(library=>[...(library.terms||[]),...(library.versions||[]).flatMap(version=>version.terms||[])])
+   .filter(invalidEnabled);
+}
+function knowledge(){
+ const available=liveLibraries().filter(item=>matchesFilter(item)&&normalize(item.name).includes(normalize(ui.librarySearch)));
+ const library=available.find(item=>item.id===ui.library)||available[0];if(library)ui.library=library.id;
+ const rows=library?visibleTerms(library):[],selected=rows.filter(row=>ui.selectedTerms.has(row.index)).length;
+ const filters=[...new Set(liveLibraries().flatMap(libraryPairs))].sort();
+ const list='<section class="card stack"><div class="bar"><h2>知识库</h2><div class="actions">'+button('新建','new-library','','small primary')+button('批量删除','batch-library','','small quiet',!liveLibraries().length)+(invalidTermStates().length?button('修正词条状态','repair-term-states','','small quiet'):'')+'</div></div>'
+ +'<input id="library-search" type="text" placeholder="搜索知识库" aria-label="搜索知识库" value="'+esc(ui.librarySearch)+'"><label class="field">语言分类<select id="filter"><option value="all">全部</option><option value="mixed" '+(ui.filter==='mixed'?'selected':'')+'>综合（多语言）</option>'+pairOptions(filters,ui.filter)+'</select></label>'
+ +'<div data-scroll-list="libraries" aria-label="知识库列表">'+(available.map(item=>button('<span>'+esc(item.name)+'</span><small>'+esc(libraryLabel(item))+' · '+item.terms.length+' 条</small>','view-library',item.id,'language-label '+(item.id===ui.library?'primary':'quiet'))).join('')||'<p class="muted">没有匹配的知识库</p>')+'</div></section>';
+ if(!library)return pageHeading('知识库管理')+'<div class="grid">'+list+'<section class="card stack">'+button('新建知识库','new-library','','primary')+'</section></div>';
+ const tools='<details class="more-menu"><summary>更多</summary><div>'+button('导出词表','export-library',library.id,'quiet')+button('版本记录','view-versions','','quiet')+button('重命名','rename-library','','quiet')+button('删除知识库','trash-library',library.id,'quiet')+'</div></details>';
+ const bulk=selected?'<div class="bulk-bar"><span>已选 '+selected+' 条</span><div class="actions">'+button('启用','enable-terms','','small quiet')+button('停用','disable-terms','','small quiet')+button('删除','delete-terms','','small quiet')+'</div></div>':'';
+ return pageHeading('知识库管理')+'<div class="grid">'+list+'<section class="card stack"><div class="bar"><div><h2>'+esc(library.name)+'</h2><small>'+esc(libraryLabel(library))+'</small></div>'+tools+'</div><div class="bar"><input id="term-search" type="text" aria-label="搜索词条" placeholder="搜索词条" value="'+esc(ui.search)+'"><div class="actions">'+button('导入','open-helper','','quiet')+button('新增术语','edit-term',-1,'primary')+'</div></div>'+bulk
+ +'<div class="kb-table" data-scroll-list="terms" data-scroll-items="tbody > tr"><table><thead><tr><th><input id="select-visible-terms" type="checkbox" aria-label="全选当前搜索结果"></th><th>原词或短语</th><th>译法</th><th>方向</th><th>状态</th><th></th></tr></thead><tbody>'
+ +(rows.map(({entry,index})=>'<tr><td><input name="selected-term" type="checkbox" value="'+index+'" aria-label="选择 '+esc(entry.source)+'" '+(ui.selectedTerms.has(index)?'checked':'')+'></td><td>'+esc(entry.source)+'</td><td>'+esc(entry.target)+'</td><td>'+esc(directionText(entryDirection(entry,library)))+'</td><td>'+(invalidEnabled(entry)?'状态异常':entry.enabled===false?'已停用':'启用')+'</td><td><div class="actions">'+button('详情','term-detail',index,'small quiet')+button('编辑','edit-term',index,'small quiet')+'</div></td></tr>').join('')||'<tr><td colspan="6">暂无匹配词条</td></tr>')+'</tbody></table></div></section></div>';
+}
+const generationRules=[
+  '在主题和内容详情内筛选有价值的术语。',
+  '分别生成已选语言之间的两个翻译方向，每条单独标注源语言和目标语言。',
+  '返回固定 JSON 草稿，保留专名和缩写，歧义写说明，不编造来源。'
+];
+function assistant(){
+  const library=liveLibraries().find(item=>item.id===ui.library)||liveLibraries()[0],importing=ui.assistantMode==='import';
+  if(!library)return pageHeading('知识库导入助手')+'<section class="card stack assistant-form"><p>请选择一个知识库存放术语。</p>'+button('创建知识库','assistant-create','','primary')+'</section>';
+  ui.library=library.id;
+  const steps=[['setup','选择任务'],['input',importing?'选择词表':'填写生成内容'],['review','核对并保存']];
+  const heading=pageHeading('知识库导入助手')+'<ol class="assistant-steps" aria-label="导入进度">'
+    +steps.map(([id,label])=>'<li'+(id===ui.assistantStep?' aria-current="step"':'')+'>'+label+'</li>').join('')+'</ol>';
+  if(ui.assistantStep==='review'&&ui.draft)return heading+draftView();
+  if(ui.assistantStep==='setup'){
+    const select='<label class="field">保存到<select id="assistant-library">'+liveLibraries().map(item=>'<option value="'+esc(item.id)+'" '+(item.id===library.id?'selected':'')+'>'+esc(item.name+' · '+libraryLabel(item))+'</option>').join('')+'<option value="__new-library">＋ 快捷创建知识库…</option></select></label>';
+    return heading+'<section class="card stack assistant-form"><h2 id="assistant-step-title" tabindex="-1">选择任务</h2>'+select
+      +'<label class="field">任务<select id="assistant-mode"><option value="import" '+(importing?'selected':'')+'>整理现有词表</option><option value="generate" '+(!importing?'selected':'')+'>生成术语</option></select></label>'
+      +'<div class="actions">'+button('下一步','assistant-next','','primary')+'</div></section>';
+  }
+  let fields;
+  if(importing){
+    fields='<label class="field">选择词表<input type="file" name="file" accept=".csv,.tsv" '+(ui.importFile?'':'required')+'></label>'
+       +(ui.importFile?'<small>已选 '+esc(ui.importFile.name)+'</small>':'')
+      +'<div class="bar">'+button('整理双语文档','import-document','','quiet')+button('配置导入助手模型','assistant-config','','quiet')+'</div>'
+      +'<label class="field">文档翻译方向<select id="document-direction">'+directionOptions(allowedDirections(library),library.direction||baseDirection)+'</select></label>'
+      +'<details class="format-help"><summary>词表格式</summary><p>选择 UTF-8 CSV 或 TSV。表头使用 term、translation，可用 source_lang、target_lang 标注方向。缺少语言时，在预览里识别或手动确认。</p></details>';
+  }else{
+    const choices=library.kind==='mixed'?Object.keys(languageLabels):library.direction.split('>');
+    const selected=library.kind==='mixed'?ui.generate.languages:choices;
+    fields='<label class="field">生成主题<input type="text" name="topic" maxlength="120" value="'+esc(ui.generate.topic)+'" placeholder="例如：三维感知、传感器融合" required></label>'
+      +'<label class="field">生成内容详情<textarea name="details" maxlength="1200" placeholder="例如：用于阅读论文，重点收录算法名称和常见缩写。">'+esc(ui.generate.details)+'</textarea></label>'
+      +'<fieldset class="language-picks"><legend>勾选两种语言（双向）</legend><div>'+choices.map(code=>'<label><input type="checkbox" name="generate-language" value="'+code+'" '+(selected.includes(code)?'checked':'')+'>'+languageLabels[code]+'</label>').join('')+'</div></fieldset>'
+      +(!ui.assistantReady?'<div class="bar"><small>生成需要配置导入助手模型。</small>'+button('前往配置','assistant-config','','quiet')+'</div>':'');
+  }
+  return heading+'<form class="card stack assistant-form" id="knowledge-assistant-form"><h2 id="assistant-step-title" tabindex="-1">'+(importing?'选择词表':'填写生成内容')+'</h2>'
+    +'<small class="assistant-context">保存到 · '+esc(library.name)+'</small>'+fields
+    +'<div class="bar">'+button('上一步','assistant-back','','quiet')+'<button class="primary" '+(!importing&&!ui.assistantReady?'disabled':'')+'>'+(importing?'识别并预览':'生成草稿')+'</button></div></form>';
+}
+
+function draftView(){
+ if(!ui.draft)return '';const {rows,origin,libraryId}=ui.draft,library=byId(libraryId);
+ const counts=Object.fromEntries(['new','duplicate','conflict','invalid'].map(key=>[key,rows.filter(row=>row.status===key).length]));
+ const names={all:'全部',new:'新增',duplicate:'重复',conflict:'译法冲突',invalid:'待核对'};
+ const shown=rows.map((row,index)=>({row,index})).filter(({row})=>ui.draftFilter==='all'||row.status===ui.draftFilter);
+ return '<section class="card stack assistant-form"><div class="bar"><h2>核对并保存</h2><span>保存到 · '+esc(library.name)+'</span><span class="draft-origin">'+(origin==='generated'?'助手生成 · 待核对':'导入草稿')+'</span></div>'
+ +'<div class="actions draft-filters">'+Object.entries(names).map(([key,name])=>button(name+(key==='all'?' · '+rows.length:' · '+counts[key]),'draft-filter',key,key===ui.draftFilter?'primary small':'quiet small')).join('')+'</div>'
+ +'<div class="bar"><label class="select-all"><input id="select-draft" type="checkbox">全选可保存条目</label><div class="actions"><select id="draft-batch-direction" aria-label="统一语言方向">'+directionOptions(allowedDirections(library),library.direction||baseDirection)+'</select>'+button('统一语言方向','draft-direction','','small quiet')+'</div></div>'
+ +'<div class="kb-table" data-scroll-list="draft" data-scroll-items="tbody > tr"><table><thead><tr><th>保存</th><th>原词</th><th>译法</th><th>方向</th><th>处理</th></tr></thead><tbody>'
+ +shown.map(({row,index})=>'<tr><td><input type="checkbox" name="draft-row" value="'+index+'" aria-label="保存第 '+(index+1)+' 条" '+(row.problem||row.status==='duplicate'||row.resolution==='skip'?'disabled':row.included?'checked':'')+'></td><td><input type="text" data-draft-field="source" data-row="'+index+'" maxlength="200" value="'+esc(row.source)+'" aria-label="第 '+(index+1)+' 条原词"></td><td><input type="text" data-draft-field="target" data-row="'+index+'" maxlength="500" value="'+esc(row.target)+'" aria-label="第 '+(index+1)+' 条译法">'+(row.existing?'<small>原有：'+esc(row.existing.target)+'</small>':'')+'</td><td><select name="draft-direction" data-row="'+index+'" aria-label="第 '+(index+1)+' 条方向"><option value="">请选择方向</option>'+directionOptions(allowedDirections(library),row.direction)+'</select></td><td>'
+ +(row.status==='conflict'?'<select data-draft-resolution="'+index+'" aria-label="冲突处理"><option value="skip">保留原有</option><option value="update" '+(row.resolution==='update'?'selected':'')+'>更新原有</option></select>':'<span class="'+(row.problem?'inline-error':'muted')+'">'+esc(row.problem||names[row.status])+'</span>')+'</td></tr>').join('')+'</tbody></table></div><div class="bar">'+button('上一步','assistant-back','','quiet')+'<div class="actions">'+button('丢弃草稿','discard-draft','','quiet')+button('保存所选术语','save-draft','','primary',!rows.some(row=>!row.problem&&row.included&&row.status!=='duplicate'&&row.resolution!=='skip'))+'</div></div></section>';
+}
+function entryKey(entry,library){return (entryDirection(entry,library)||'')+'|'+normalize(entry.source);}
+function prepareDraft(library,entries,origin){
+ const known=new Map(library.terms.map(entry=>[entryKey(entry,library),entry])),batch=new Set();
+ const rows=entries.map(entry=>{
+   const existing=known.get(entryKey(entry,library));let problem='',status='new',resolution=existing?entry.resolution:undefined;
+   if(typeof entry.source!=='string'||typeof entry.target!=='string'||!entry.source.trim()||!entry.target.trim()||entry.source.length>200||entry.target.length>500)problem='原词或译法为空或过长';
+   else if(!directions.includes(entry.direction))problem='请选择方向';
+   else if(!allowedDirections(library).includes(entry.direction))problem='与目标库语言不符';
+   else if(batch.has(entryKey(entry,library)))problem='本批次重复原词';
+   if(problem)status='invalid';
+   else if(existing){status=existing.target===entry.target?'duplicate':'conflict';resolution=resolution||'skip';}
+   batch.add(entryKey(entry,library));
+   return {...entry,existing,status,resolution,problem,included:status==='new'?(entry.status&&entry.status!=='new'?true:entry.included??true):status==='conflict'&&resolution==='update'?(entry.included??true):false};
+ });
+ ui.draft={libraryId:library.id,origin,rows};
+}
+async function suggestImportLanguages(entries){
+ const missing=entries.map((entry,index)=>({...entry,index})).filter(entry=>!directions.includes(entry.direction)&&!entry.invalidLanguage);
+ if(!missing.length||!ui.assistantReady||missing.length>200)return entries;
+ const reply=await nativeCall('assistant',{task:'detect_languages',entries:missing.map(entry=>({index:entry.index,source:entry.source,target:entry.target}))});
+ const suggestions=new Map((reply.entries||[]).map(entry=>[entry.index,entry]));
+ return entries.map((entry,index)=>{
+   if(directions.includes(entry.direction)||entry.invalidLanguage)return entry;
+   const suggestion=suggestions.get(index),direction=suggestion?.source_lang+'>'+suggestion?.target_lang;
+   return directions.includes(direction)?{...entry,direction,languageOrigin:'助手建议 · 请核对'}:entry;
+ });
+}
+function buildGenerationRequest(library,data){
+  const languages=data.getAll('generate-language');
+  const topic=data.get('topic').trim();
+  const details=data.get('details').trim();
+  if(!topic)throw Error('请填写生成主题。');
+  if(languages.length!==2||new Set(languages).size!==2)throw Error('请只勾选两种语言。');
+  const pair=languages.join('>');
+  const requested=[pair,reverseDirection(pair)];
+  if(requested.some(direction=>!allowedDirections(library).includes(direction)))throw Error('所选语言与目标库不符。');
+  return {task:'generate_terminology',topic,details,allowed_pairs:requested,rules:generationRules,schema_version:1};
+}
+function history(library){
+  return library.versions||[{number:1,action:'初始版本',date:null,terms:structuredClone(library.terms)}];
+}
+function recordVersion(library,versions,action,affected){
+  library.versions=[...versions,{number:versions.at(-1).number+1,action,affected,date:new Date().toISOString(),terms:structuredClone(library.terms)}];
+}
+function versionsView(library){
+  const versions=history(library),latest=versions.at(-1);
+  return '<div class="versions stack" data-scroll-list="versions" role="region" aria-label="历史版本">'+[...versions].reverse().map(version=>{
+    const date=version.date?new Date(version.date).toLocaleString('zh-CN'):'';
+    return '<div class="revision"><div><strong>版本 '+version.number+' · '+esc(version.action)+'</strong><br><small>'
+      +esc([version.terms.length+' 条词条',version.affected?'影响 '+version.affected+' 条':'',date].filter(Boolean).join(' · '))+'</small></div>'
+      +(version===latest?'<span class="badge">当前</span>':button(version===versions.at(-2)?'恢复上一版':'恢复此版本','restore-version',version.number,'small quiet'))+'</div>'+versionDiff(versions[versions.indexOf(version)-1]?.terms||[],version.terms,library);
+  }).join('')+'</div>';
+}
+function renderHistory(library){
+  document.querySelector('#history-library').textContent=library.name;
+  document.querySelector('#history-body').innerHTML=versionsView(library);
+  fitGrowingLists(document);
+}
+function openHistory(){
+  const dialog=document.querySelector('#history-dialog');
+  const library=byId(ui.library);
+  dialog.dataset.libraryId=library.id;
+  document.querySelector('#history-status').textContent='';
+  renderHistory(library);
+  dialog.showModal();
+  fitGrowingLists(document);
+}
+document.querySelector('#history-body').addEventListener('click',event=>{
+  const control=event.target.closest('[data-action="restore-version"]');
+  if(control)showRestore(Number(control.dataset.value));
+});
+function showRestore(number){
+  const library=byId(document.querySelector('#history-dialog').dataset.libraryId);
+  const version=history(library).find(item=>item.number===number);
+  if(!version)return;
+  ui.restore={libraryId:library.id,version};
+  document.querySelector('#restore-summary').textContent='将「'+library.name+'」的词条恢复到版本 '+version.number+'（'+version.terms.length+' 条）。恢复会新建一个版本，当前版本仍可找回。';
+  document.querySelector('#restore-summary').textContent+=' '+diffSummary(library.terms,version.terms,library);
+  document.querySelector('#restore-dialog').showModal();
+}
+document.querySelector('#restore-form').addEventListener('submit',event=>{
+  event.preventDefault();
+  if(!ui.restore)return;
+  const {libraryId,version}=ui.restore,library=byId(libraryId),versions=history(library);
+  library.terms=structuredClone(version.terms);
+  recordVersion(library,versions,'恢复自版本 '+version.number,0);
+  ui.restore=null;
+  document.querySelector('#restore-dialog').close();
+  persist('词条已恢复，历史版本已保留。');
+  render();
+  renderHistory(library);
+  document.querySelector('#history-status').textContent=ui.note;
+  document.querySelector('#history-close').focus();
+});
+
+function parseDelimited(text,delimiter){
+  const records=[];
+  let cells=[],field='',quoted=false,closedQuote=false,line=1,start=1;
+  text=text.replace(/\r\n?/g,'\n');
+  for(let index=0;index<=text.length;index++){
+    const char=text[index]??'\n';
+    if(quoted){
+      if(index===text.length)throw Error('第 '+start+' 行的引号未闭合。');
+      if(char==='"'){
+        if(text[index+1]==='"'){field+='"';index++;}
+        else{quoted=false;closedQuote=true;}
+      }else{field+=char;if(char==='\n')line++;}
+    }else if(char===delimiter||char==='\n'){
+      cells.push(field.trim());field='';closedQuote=false;
+      if(char==='\n'){
+        if(cells.some(Boolean))records.push({cells,line:start});
+        cells=[];line++;start=line;
+      }
+    }else if(char==='"'&&!field&&!closedQuote){quoted=true;}
+    else if(closedQuote||char==='"')throw Error('第 '+start+' 行的引号格式无效。');
+    else field+=char;
+  }
+  return records;
+}
+function parseGlossary(text,extension,name){
+  const records=parseDelimited(text,extension==='tsv'?'\t':',');
+  const headings=records.shift()?.cells.map(cell=>cell.toLowerCase())||[];
+  const source=headings.indexOf('term'),target=headings.indexOf('translation');
+  const from=headings.indexOf('source_lang'),to=headings.indexOf('target_lang');
+  if(source<0||target<0||new Set(headings).size!==headings.length)throw Error('表头须包含唯一的 term 和 translation 列。');
+  if((from===-1)!==(to===-1))throw Error('语言列须同时提供 source_lang 和 target_lang。');
+  if(!records.length||records.length>5000)throw Error('词表须包含 1 至 5000 条。');
+  const codes=Object.keys(languageLabels);
+  const languageCode=value=>codes.find(code=>code.toLowerCase()===(value||'').toLowerCase())||'';
+  return records.map(({cells,line})=>{
+    const escaped=headings.includes('jianyi_escaped_fields')?(cells[headings.indexOf('jianyi_escaped_fields')]||'').split(';'):[];
+    const literal=(name,index)=>{const value=cells[index]||'';return escaped.includes(name)&&value.startsWith("'")?value.slice(1):value;};
+    const fromText=from>=0?cells[from]||'':'',toText=to>=0?cells[to]||'':'';
+    const sourceCode=languageCode(fromText),targetCode=languageCode(toText);
+    return {
+      source:literal('term',source),target:literal('translation',target),note:headings.includes('note')?literal('note',headings.indexOf('note')):'',sourceCode,targetCode,
+      invalidLanguage:Boolean((fromText&&!sourceCode)||(toText&&!targetCode)),
+      direction:sourceCode&&targetCode?sourceCode+'>'+targetCode:'',
+      reference:headings.includes('reference')?literal('reference',headings.indexOf('reference'))||name+' · 第 '+line+' 行':name+' · 第 '+line+' 行',
+      enabled:headings.includes('enabled')?cells[headings.indexOf('enabled')]!=='false':true
+    };
+  });
+}
+async function saveDraft(){
+ if(!ui.draft)return false;const draft=structuredClone(ui.draft),library=byId(draft.libraryId);
+ if(!library||library.deletedAt){ui.note='目标知识库已删除，请重新选择保存位置。';render();return false;}
+ prepareDraft(library,draft.rows,draft.origin);
+ const picked=ui.draft.rows.filter(row=>row.included&&!row.problem&&row.status!=='duplicate'&&row.resolution!=='skip');
+ if(!picked.length){ui.note='请勾选通过核对的条目。';render();return false;}
+ const versions=history(library);
+ for(const row of picked){
+   const entry={source:row.source.trim(),target:row.target.trim(),direction:row.direction,reference:row.reference||'',note:row.note||'',origin:draft.origin,enabled:row.enabled!==false};
+   const index=library.terms.findIndex(item=>entryKey(item,library)===entryKey(entry,library));
+   if(index<0)library.terms.push(entry);else library.terms[index]={...library.terms[index],...entry,edited:true};
+ }
+ recordVersion(library,versions,draft.origin==='generated'?'保存生成术语':'导入词表',picked.length);
+ if(!await persist('已保存 '+picked.length+' 条，并记录版本。')){ui.draft=draft;render();return false;}
+ ui.draft=null;ui.filter='all';ui.assistantStep='setup';ui.importFile=null;render();return true;
+}
+
+app.addEventListener('input',event=>{
+  if(event.target.form?.id!=='knowledge-assistant-form')return;
+  if(['topic','details'].includes(event.target.name))ui.generate[event.target.name]=event.target.value;
+  if(event.target.name==='generate-language')ui.generate.languages=[...event.target.form.querySelectorAll('[name="generate-language"]:checked')].map(input=>input.value);
+});
+app.addEventListener('submit',async event=>{
+  if(event.target.id!=='knowledge-assistant-form')return;
+  event.preventDefault();
+  const data=new FormData(event.target),library=byId(ui.library);
+  const run=++importRun,origin=ui.assistantMode==='import'?'imported':'generated';
+  ui.draft=null;
+  try{
+    let entries;
+    if(origin==='imported'){
+      const file=ui.importFile||data.get('file'),extension=file?.name.split('.').pop().toLowerCase();
+      if(!['csv','tsv'].includes(extension)||!file.size||file.size>64*1024*1024)throw Error('请选择 64 MiB 以内的 UTF-8 CSV 或 TSV 文件。');
+      const text=new TextDecoder('utf-8',{fatal:true}).decode(await file.arrayBuffer());
+      entries=await suggestImportLanguages(parseGlossary(text,extension,file.name));
+    }else{
+      if(!ui.assistantReady)throw Error('请先配置导入助手模型。');
+      const request=buildGenerationRequest(library,data);
+      const response=await nativeCall('assistant',request);
+      entries=response.entries.map(entry=>({source:entry.source,target:entry.target,note:entry.note||'',direction:entry.source_lang+'>'+entry.target_lang,reference:'助手生成 · 请核对'}));
+    }
+    if(run!==importRun)return;
+    prepareDraft(library,entries,origin);
+    ui.assistantStep='review';ui.note='';
+  }catch(error){
+    if(run!==importRun)return;
+    ui.note=error instanceof TypeError?'文件无法按 UTF-8 读取。':error.message;
+  }
+  if(ui.page==='assistant')render();
+});
+
+function trashView(){
+  function section(title,items,key){
+    const rows=items.filter(item=>item.deletedAt&&normalize(item.name).includes(normalize(ui.trashSearch))).map(item=>'<div class="revision"><div><strong>'+esc(item.name)+'</strong><br><small>'
+      +esc(new Date(item.deletedAt).toLocaleString('zh-CN'))+'</small></div><div class="actions">'
+      +button('恢复','restore-'+key,item.id,'small quiet')+button('彻底删除','purge-'+key,item.id,'small quiet')+'</div></div>').join('');
+    return '<section class="card stack assistant-form"><div class="bar"><h2>'+title+'</h2>'
+      +(rows?button('批量恢复','batch-restore',key,'small quiet')+button('批量彻底删除','batch-purge-'+key,'','small quiet') :'')+'</div><div data-scroll-list="trash-'+key+'" role="region" aria-label="已删除'+title+'">'+(rows||'<small>暂无已删除内容</small>')+'</div></section>';
+  }
+  return pageHeading('已删除内容')+'<input id="trash-search" type="text" aria-label="搜索已删除内容" placeholder="搜索已删除内容" value="'+esc(ui.trashSearch)+'" style="margin-bottom:15px"><div class="stack">'+section('知识库',model.libraries,'library')+section('知识库组合',model.presets,'combo')+'</div>';
+}
+const trashDialog=document.querySelector('#trash-dialog');
+const trashChoices=document.querySelector('#trash-choices');
+const trashInputs=()=>[...trashChoices.querySelectorAll('input[name="trash-choice"]')];
+function checkedTrashItems(){return trashInputs().filter(item=>item.checked).map(item=>item.value);}
+function reflectSelectAll(master,items){
+  if(!master)return;
+  const count=items.filter(item=>item.checked).length;
+  master.checked=items.length>0&&count===items.length;
+  master.indeterminate=count>0&&count<items.length;
+}
+function refreshTrashSelection(){
+  const options=ui.trashAction;
+  const inputs=trashInputs();
+  reflectSelectAll(document.querySelector('#trash-toggle'),inputs);
+  const selected=checkedTrashItems();
+  document.querySelector('#trash-message').textContent=typeof options.message==='function'?options.message(selected):options.message;
+  if(options.requireSelection)document.querySelector('#trash-confirm .primary').disabled=!selected.length;
+}
+function trashPrompt(title,message,label,run,{items=[],selected=false,requireSelection=false}={}){
+  document.querySelector('#trash-title').textContent=title;
+  trashChoices.innerHTML=items.length?'<label class="select-all"><input type="checkbox" id="trash-toggle">全选</label><div class="trash-options" data-scroll-list="trash-options" role="region" aria-label="待操作内容">'
+    +items.map(item=>'<label><input type="checkbox" name="trash-choice" value="'+esc(item.id)+'" '+(selected?'checked':'')+'>'+esc(item.name)+'</label>').join('')+'</div>':'';
+  document.querySelector('#trash-actions').innerHTML='<button type="button" class="quiet" id="trash-cancel" autofocus>取消</button>'
+    +'<button class="primary">'+esc(label)+'</button>';
+  document.querySelector('#trash-cancel').addEventListener('click',()=>trashDialog.close());
+  ui.trashAction={message,run,requireSelection};
+  refreshTrashSelection();
+  trashDialog.showModal();
+  fitGrowingLists(document);
+}
+trashChoices.addEventListener('change',event=>{
+  if(event.target.id==='trash-toggle')for(const input of trashInputs())input.checked=event.target.checked;
+  refreshTrashSelection();
+});
+document.querySelector('#trash-confirm').addEventListener('submit',event=>{
+  event.preventDefault();
+  const options=ui.trashAction,selected=checkedTrashItems();
+  if(!options||(options.requireSelection&&!selected.length))return;
+  ui.trashAction=null;
+  trashDialog.close();
+  options.run(selected);
+});
+trashDialog.addEventListener('close',()=>{if(!trashDialog.open)ui.trashAction=null;});
+function finishTrash(note){
+  if(model.active&&!livePresets().some(entry=>entry.id===model.active))model.active=null;
+  if(!liveLibraries().some(entry=>entry.id===ui.library))ui.library=liveLibraries()[0]?.id||null;
+  persist(note);render();
+}
+function deleteMessage(library,permanent,ids){
+  const type=library?'知识库':'组合';
+  const intro=permanent?'所选'+type+'将无法恢复。':'所选'+type+'将移到「已删除内容」，之后可以恢复。';
+  if(!library)return intro+' 组合里的知识库可继续独立使用。';
+  const linked=model.presets.filter(combo=>ids.some(id=>combo.ids.includes(id)||ui.comboDrafts.get(combo.id)?.ids.includes(id)));
+  const context=linked.length?' 影响组合：'+linked.map(item=>item.name+(item.deletedAt?'（已删除）':'')).join('、')+'。':'';
+  return intro+context+(permanent?' 词条、版本记录和组合引用会一起清除。':' 删除期间停止调用这些知识库。');
+}
+function deleteRecords(library,permanent,ids){
+  const records=library?model.libraries:model.presets,type=library?'知识库':'组合';
+  const selected=records.filter(item=>ids.includes(item.id)&&Boolean(item.deletedAt)===permanent);
+  if(!selected.length)return;
+  const targets=new Set(selected.map(item=>item.id));
+  if(permanent){
+    if(library){
+      model.libraries=records.filter(item=>!targets.has(item.id));
+      for(const combo of [...model.presets,...ui.comboDrafts.values()])combo.ids=combo.ids.filter(id=>!targets.has(id));
+    }else model.presets=records.filter(item=>!targets.has(item.id));
+  }else{
+    const now=new Date().toISOString();
+    for(const item of selected)item.deletedAt=now;
+  }
+  if(library&&targets.has(ui.draft?.libraryId))ui.draft=null;
+  if(!library)for(const id of targets)ui.comboDrafts.delete(id);
+  finishTrash((permanent?'已彻底删除 ':'已删除 ')+targets.size+' 个'+type+'。');
+}
+function batchDelete(library,permanent){
+  const records=library?model.libraries:model.presets;
+  const items=records.filter(item=>Boolean(item.deletedAt)===permanent);
+  const type=library?'知识库':'组合';
+  if(!items.length)return;
+  trashPrompt((permanent?'批量彻底删除':'批量删除')+type,
+    ids=>ids.length?deleteMessage(library,permanent,ids):'勾选要删除的'+type+'。',
+    permanent?'彻底删除所选':'删除所选',
+    ids=>deleteRecords(library,permanent,ids),{items,requireSelection:true});
+}
+function handleTrash(action,id){
+  const library=action.endsWith('library');
+  const records=library?model.libraries:model.presets;
+  const item=records.find(entry=>entry.id===id);
+  if(!item)return;
+  const type=library?'知识库':'组合';
+  const name='「'+item.name+'」';
+  if(action.startsWith('restore')){
+    if(!item.deletedAt)return;
+    const children=library?[]:item.ids.map(byId).filter(entry=>entry?.deletedAt);
+    const restore=selected=>{
+      for(const entry of children)if(selected.includes(entry.id))delete entry.deletedAt;
+      if(!library)item.ids=item.ids.filter(entry=>byId(entry));
+      delete item.deletedAt;
+      finishTrash('已恢复'+type+name+'。');
+    };
+    if(children.length){
+      trashPrompt('恢复知识库组合',ids=>'选择随组合'+name+'一起恢复的知识库。'+(ids.length?'':'当前只恢复组合。'),
+        '确认恢复',restore,{items:children,selected:true});
+    }else restore([]);
+    return;
+  }
+  const permanent=action.startsWith('purge');
+  if(Boolean(item.deletedAt)!==permanent)return;
+  const verb=permanent?'彻底删除':'删除';
+  trashPrompt(verb+type,name+'。'+deleteMessage(library,permanent,[id]),verb,()=>deleteRecords(library,permanent,[id]));
+}
+
+function pageHeading(title){
+  return '<div class="page-heading"><h1>'+title+'</h1></div>';
+}
+let listSizeObserver;
+function fitGrowingLists(root){
+  listSizeObserver?.disconnect();
+  const lists=[...root.querySelectorAll('[data-scroll-list]')];
+  function size(list){
+    const items=[...list.querySelectorAll(list.dataset.scrollItems||':scope > *')];
+    const active=items.length>5;
+    list.classList.toggle('bounded-list',active);
+    if(!active){list.style.removeProperty('max-height');list.removeAttribute('tabindex');return;}
+    const gap=parseFloat(getComputedStyle(list).rowGap)||0;
+    const header=list.querySelector('thead')?.offsetHeight||0;
+    const height=header+items.slice(0,5).reduce((total,item)=>total+item.getBoundingClientRect().height,0)+gap*4;
+    list.style.maxHeight=Math.ceil(height)+'px';
+    list.tabIndex=0;
+  }
+  listSizeObserver=new ResizeObserver(()=>lists.forEach(size));
+  for(const list of lists){
+    size(list);
+    const items=[...list.querySelectorAll(list.dataset.scrollItems||':scope > *')].slice(0,5);
+    for(const item of items)listSizeObserver.observe(item);
+    if(list.querySelector('thead'))listSizeObserver.observe(list.querySelector('thead'));
+  }
+}
+
+let preferenceState={document:{rules:[],candidates:[],collect:false,scope:''},revision:0},preferenceDirty=false,preferencePreview=[];
+const preferenceLanguages={auto:'所有原文语言',...languageLabels};
+function preferenceLanguageOptions(selected,target=false){return Object.entries(preferenceLanguages).filter(([code])=>!target||code!=='auto').map(([code,name])=>'<option value="'+code+'" '+(code===selected?'selected':'')+'>'+name+'</option>').join('');}
+function preferenceView(){
+ const state=preferenceState.document,ready=state.candidates.filter(row=>row.ready&&row.status==='pending');
+ const ruleRow=rule=>'<div class="preference-rule stack" data-preference-rule="'+esc(rule.id)+'"><div class="bar"><label class="select-all"><input type="checkbox" data-pref="enabled" '+(rule.enabled!==false?'checked':'')+'>'+esc(rule.rule)+'</label><details class="more-menu"><summary>编辑</summary><div>'+button('修改规则','edit-preference',rule.id,'quiet')+(rule.scope?button('转为通用规则','global-preference',rule.id,'quiet'):'')+button('删除','delete-preference',rule.id,'quiet')+'</div></details></div><small>'+esc((rule.source==='auto'?'所有原文语言':preferenceLanguages[rule.source]||rule.source)+' → '+(preferenceLanguages[rule.target]||rule.target))+(rule.scope?' · 旧场景：'+esc(rule.scope):'')+'</small>'+(ui.preferenceEdit===rule.id?'<textarea data-pref="rule" maxlength="500">'+esc(rule.rule)+'</textarea>':'')+'</div>';
+ return pageHeading('翻译偏好')+'<div class="stack narrow preference-page"><section class="card stack"><div class="bar"><h2>我的规则</h2><label class="select-all"><input type="checkbox" id="preferences-enabled" '+(state.enabled!==false?'checked':'')+'>启用</label></div>'
+ +'<div data-scroll-list="preference-rules">'+(state.rules.map(ruleRow).join('')||'<p class="muted">尚未添加偏好</p>')+'</div><div class="actions">'+button('添加规则','add-preference','','quiet')+button('取消更改','cancel-preferences','','quiet')+button('保存更改','save-preferences','','primary')+'</div></section>'
+ +'<details class="card stack"><summary>更多设置'+(ready.length?' · '+ready.length+' 条待确认':'')+'</summary><div class="stack" style="margin-top:12px"><label class="select-all"><input id="preference-collect" type="checkbox" '+(state.collect?'checked':'')+'>根据译文修改整理建议</label>'
+ +'<details><summary>从示例整理偏好</summary><form id="extract-preference" class="stack"><div class="row"><label class="field">原文语言<select name="source">'+preferenceLanguageOptions('auto')+'</select></label><label class="field">译文语言<select name="target">'+preferenceLanguageOptions(readyModels?.target||'zh-Hans',true)+'</select></label></div><input type="hidden" name="scope" value=""><label class="field">认可的译文示例<textarea name="examples" maxlength="8000" required rows="5"></textarea></label><button type="submit">提取并预览</button></form><div class="stack">'+preferencePreview.map((rule,index)=>'<div class="stack"><label><input type="checkbox" data-pref-preview-check="'+index+'" '+(rule.selected?'checked':'')+'> 保存</label><textarea data-pref-preview="'+index+'" maxlength="500">'+esc(rule.rule)+'</textarea><small>'+esc(rule.evidence||'')+'</small></div>').join('')+'</div>'+(preferencePreview.length?button('保存所选规则','save-preference-preview','','primary'):'')+'</details>'
+ +(ready.length?'<details open><summary>待确认建议 · '+ready.length+'</summary>'+ready.map(rule=>'<div class="stack"><textarea data-candidate-rule="'+esc(rule.id)+'" maxlength="500">'+esc(rule.rule)+'</textarea><div class="actions">'+button('忽略','ignore-preference',rule.id,'quiet')+button('确认保存','confirm-preference',rule.id,'primary')+'</div></div>').join('')+'</details>':'')+'</div></details></div>'
+ +'<dialog id="new-preference-dialog"><form id="new-preference" class="stack"><h2>添加规则</h2><label class="field">偏好规则<textarea name="rule" required maxlength="500" placeholder="例如：保留原文的段落和数字编号"></textarea></label><input type="hidden" name="scope" value=""><details><summary>适用语言</summary><div class="row"><label class="field">原文语言<select name="source">'+preferenceLanguageOptions('auto')+'</select></label><label class="field">译文语言<select name="target">'+preferenceLanguageOptions(readyModels?.target||'zh-Hans',true)+'</select></label></div></details><div class="actions">'+button('取消','close-new-preference','','quiet')+'<button class="primary">添加并保存</button></div></form></dialog>';
+}
+async function persistPreferences(){preferenceState=await nativeCall('save-preferences',{values:preferenceState.document,revision:preferenceState.revision});preferenceDirty=false;nativeToast('已保存翻译偏好');render();}
+app.addEventListener('input',event=>{
+ const node=event.target,row=node.closest('[data-preference-rule]');
+ if(row){const rule=preferenceState.document.rules.find(rule=>rule.id===row.dataset.preferenceRule);if(node.dataset.pref==='rule')rule.rule=node.value;preferenceDirty=true;}
+ if(node.id==='preference-scope'){preferenceState.document.scope=node.value;preferenceDirty=true;}
+ if(node.dataset.prefPreview!==undefined)preferencePreview[Number(node.dataset.prefPreview)].rule=node.value;
+});
+app.addEventListener('change',event=>{
+ const node=event.target,row=node.closest('[data-preference-rule]');
+ if(row&&node.dataset.pref==='enabled'){preferenceState.document.rules.find(rule=>rule.id===row.dataset.preferenceRule).enabled=node.checked;preferenceDirty=true;}
+ if(node.id==='preference-collect'){preferenceState.document.collect=node.checked;preferenceDirty=true;}
+ if(node.dataset.prefPreviewCheck!==undefined)preferencePreview[Number(node.dataset.prefPreviewCheck)].selected=node.checked;
+});
+app.addEventListener('click',async event=>{
+ const node=event.target.closest('[data-action]');if(!node)return;const {action,value}=node.dataset;
+ if(action==='delete-preference'){preferenceState.document.rules=preferenceState.document.rules.filter(rule=>rule.id!==value);preferenceDirty=true;render();}
+ if(action==='save-preferences')await persistPreferences();
+ if(action==='save-preference-preview'){for(const item of preferencePreview.filter(rule=>rule.selected))preferenceState.document.rules.push({id:crypto.randomUUID(),source:item.source,target:item.target,scope:item.scope,rule:item.rule,enabled:true});await persistPreferences();preferencePreview=[];render();}
+ if(action==='confirm-preference'||action==='ignore-preference'){
+   if(preferenceDirty){nativeToast('请先保存当前偏好修改');return;}
+   const rule=app.querySelector('[data-candidate-rule="'+CSS.escape(value)+'"]').value;
+   preferenceState=await nativeCall('confirm-preference',{id:value,ignore:action==='ignore-preference',rule});render();
+ }
+});
+app.addEventListener('submit',async event=>{
+ if(!['new-preference','extract-preference'].includes(event.target.id))return;event.preventDefault();
+ const data=Object.fromEntries(new FormData(event.target));if(data.source===data.target){nativeToast('请选择不同的语言');return;}
+ if(event.target.id==='new-preference'){preferenceState.document.rules.push({id:crypto.randomUUID(),...data,enabled:true});await persistPreferences();}
+ else{const control=event.submitter;control.disabled=true;try{const rules=await nativeCall('extract-preferences',data);preferencePreview=rules.map(item=>({rule:item.rule,evidence:item.evidence,source:data.source,target:data.target,scope:data.scope,selected:true}));nativeToast(rules.length?'请确认提取的规则':'未提取到有明确依据的规则');render();}finally{control.disabled=false;}}
+});
+
+function render(focus){
+  const scrollPositions=new Map([...document.querySelectorAll('[data-scroll-list]')].map(list=>[list.dataset.scrollList,list.scrollTop]));
+  app.hidden=ui.page==='models';
+  document.querySelector('#model-wrap').hidden=ui.page!=='models';
+  document.querySelector('#model-return').hidden=!ui.helperBack;
+  document.querySelectorAll('.nav [data-page]').forEach(tab=>{
+    const current=tab.dataset.page===ui.page&&(!tab.dataset.model||tab.dataset.model===ui.modelPage);
+    tab.setAttribute('aria-current',current?'page':'false');
+  });
+  if(app.hidden)return;
+  const view=ui.page==='storage'?storageView():ui.page==='backup'?backupView():ui.page==='translation'||ui.page==='capture'?basicView():ui.page==='knowledge'?knowledge():ui.page==='combinations'?pageHeading('知识库组合')+settings():ui.page==='trash'?trashView():ui.page==='retention'?retentionView():ui.page==='preferences'?preferenceView():assistant();
+  app.innerHTML=view+'<p class="status" role="status">'+esc(ui.note)+'</p>';
+  reflectSelectAll(app.querySelector('#combo-select-all'),[...app.querySelectorAll('input[name="library"]')]);
+  reflectSelectAll(app.querySelector('#select-visible-terms'),[...app.querySelectorAll('input[name="selected-term"]')]);
+  reflectSelectAll(app.querySelector('#select-draft'),[...app.querySelectorAll('input[name="draft-row"]:not(:disabled)')]);
+  fitGrowingLists(document);
+  for(const list of app.querySelectorAll('[data-scroll-list]'))list.scrollTop=scrollPositions.get(list.dataset.scrollList)||0;
+  if(focus)app.querySelector(focus)?.focus();
+}
+function openPage(page){
+  ui.page=page;
+  const selectedTab=document.querySelector('.nav [data-page="'+page+'"]'+(page==='models'?'[data-model="'+ui.modelPage+'"]':''));
+  if(selectedTab){const list=selectedTab.closest('.nav-children');for(const group of document.querySelectorAll('.nav-children')){group.hidden=group!==list;group.previousElementSibling?.setAttribute('aria-expanded',String(group===list));}}ui.note='';
+  if(page==='preferences'&&!preferenceDirty)nativeCall('preferences').then(value=>{preferenceState=value;if(ui.page==='preferences')render();});
+  if(page!=='models')ui.helperBack=false;
+  render();
+}
+app.addEventListener('change',event=>{
+  const control=event.target;
+  if(control.name==='file'&&control.form?.id==='knowledge-assistant-form'){
+    if(control.files?.length)ui.importFile=control.files[0];
+    return;
+  }
+  if(control.id==='filter'){ui.filter=control.value;ui.note='';render('#filter');return;}
+  if(control.name==='draft-direction'&&ui.draft){
+    const index=Number(control.dataset.row),row=ui.draft.rows[index];
+    row.direction=control.value;row.languageOrigin='已手动确认';
+    if(row.problem)row.included=true;
+    prepareDraft(byId(ui.draft.libraryId),ui.draft.rows,ui.draft.origin);
+    render('[data-row="'+index+'"]');return;
+  }
+  if(control.name==='draft-row'&&ui.draft){
+    ui.draft.rows[Number(control.value)].included=control.checked;return;
+  }
+  if(control.id==='assistant-mode'||control.id==='assistant-library'){
+    importRun++;ui.note='';
+    if(control.value==='__new-library'){
+      control.value=ui.library;openLibraryDialog(false,true);return;
+    }
+    if(control.id==='assistant-mode'){ui.assistantMode=control.value;ui.draft=null;}
+    else{
+      ui.library=control.value;
+      if(ui.draft)prepareDraft(byId(ui.library),ui.draft.rows,ui.draft.origin);
+    }
+    render('#'+control.id);return;
+  }
+  if(control.id==='preset'){requestCombo(control.value);return;}
+  const current=editablePreset();
+  if(control.id==='combo-select-all'){
+    const ids=liveLibraries().map(item=>item.id);
+    if(control.checked)current.ids=[...current.ids,...ids.filter(id=>!current.ids.includes(id))];
+    else current.ids=current.ids.filter(id=>!ids.includes(id));
+  }else if(control.id==='order'){
+    if(control.value==='manual')current.ids=[...ordered(current).map(item=>item.id),...current.ids.filter(id=>byId(id)?.deletedAt)];
+    current.mode=control.value;
+  }else if(control.name==='library'){
+    if(control.checked)current.ids.push(control.value);
+    else current.ids=current.ids.filter(id=>id!==control.value);
+  }else return;
+  ui.note='';
+  render(control.id?'#'+control.id:'input[value="'+control.value+'"]');
+});
+app.addEventListener('click',async event=>{
+  const target=event.target.closest('button[data-action]');
+  if(!target)return;
+  const {action,value}=target.dataset;
+  if(action==='reset-retention'){Object.assign(retentionDraft,retentionDefaults);render();return;}
+  if(action==='import-document'){
+    if(!ui.assistantReady){ui.note='导入助手模型未配置。';render();return;}
+    try{
+      const entries=await nativeCall('import-knowledge-document',{direction:document.getElementById('document-direction').value});
+      if(entries){prepareDraft(byId(ui.library),entries,'imported');ui.assistantStep='review';ui.note='';render();}
+    }catch(error){ui.note=error.message;render();}return;
+  }
+
+  if(['batch-library','batch-combo','batch-purge-library','batch-purge-combo'].includes(action)){
+    batchDelete(action.endsWith('library'),action.includes('purge'));return;
+  }
+  if(['trash-library','trash-combo','purge-library','purge-combo','restore-library','restore-combo'].includes(action)){handleTrash(action,value);return;}
+  if(action==='assistant-create'){openLibraryDialog(false,true);return;}
+  if(action==='view-library'){ui.selectedTerms.clear();ui.library=value;ui.note='';render('[data-action="view-library"][data-value="'+value+'"]');return;}
+  if(action==='open-helper'){importRun++;if(!ui.draft)ui.assistantStep='setup';openPage('assistant');return;}
+  if(action==='assistant-config'){
+    ui.helperBack=true;ui.modelPage='assistant';unguardedOpenPage('models');requestModelPage();return;
+  }
+  if(action==='assistant-next'||action==='assistant-back'){
+    importRun++;
+    ui.assistantStep=action==='assistant-next'||ui.assistantStep==='review'?'input':'setup';
+    ui.note='';render('#assistant-step-title');return;
+  }
+  if(action==='retry-language'&&ui.draft&&ui.assistantReady){
+    const {rows,origin,libraryId}=ui.draft;
+    const entries=await suggestImportLanguages(rows);
+    prepareDraft(byId(libraryId),entries,origin);
+    ui.note='已重新检查未确认的方向。';render();return;
+  }
+  if(action==='discard-draft'){ui.draft=null;ui.assistantStep='input';ui.note='';render();return;}
+  if(action==='save-draft'){saveDraft();return;}
+  if(action==='view-versions'){openHistory();return;}
+  if(action==='new-library'||action==='rename-library'){
+    openLibraryDialog(action==='rename-library',false);return;
+  }
+  if(action==='edit-term'){
+    ui.termIndex=Number(value);
+    const entry=byId(ui.library).terms[ui.termIndex];
+    termForm.elements.source.value=entry?.source||'';
+    termForm.elements.target.value=entry?.target||'';
+    termForm.elements.note.value=entry?.note||'';
+    termForm.elements.enabled.checked=entry?.enabled??true;
+    const library=byId(ui.library);
+    termForm.elements.direction.innerHTML=directionOptions(allowedDirections(library),entry?entryDirection(entry,library):(directions.includes(ui.filter)?ui.filter:library.direction));
+    document.querySelector('#term-title').textContent=entry?'编辑术语':'新增术语';
+    document.querySelector('#term-error').textContent='';
+    termDialog.showModal();
+    return;
+  }
+  const current=editablePreset();
+  if(action==='save-combination'){
+    const saved=preset();
+    if(!comboDirty(saved,current))return;
+    if(model.presets.some(item=>item.id!==saved.id&&item.name===current.name)){
+      ui.note='已有同名组合，请重新命名。';render();return;
+    }
+    await saveCurrentCombination();return;
+  }
+  if(action==='new'||action==='rename'){
+    if(action==='new'&&pageDirty()&&!await guardNavigation())return;
+    ui.newEmpty=action==='new'&&value==='empty';
+    ui.naming=action;
+    form.elements.name.value=action==='rename'?current.name:'';
+    document.querySelector('#name-title').textContent=action==='rename'?'重命名组合':'另存知识库组合';
+    document.querySelector('#name-error').textContent='';
+    form.querySelector('button.primary').textContent=action==='rename'?'确认名称':'保存新组合';
+    dialog.showModal();
+    return;
+  }
+  if(action==='up'||action==='down'){
+    const index=current.ids.indexOf(value);
+    const enabled=ordered(current).map(item=>item.id);
+    const other=current.ids.indexOf(enabled[enabled.indexOf(value)+(action==='up'?-1:1)]);
+    if(other<0)return;
+    [current.ids[index],current.ids[other]]=[current.ids[other],current.ids[index]];
+    ui.note='';render('input[value="'+value+'"]');return;
+  }
+});
+document.querySelector('#cancel-name').addEventListener('click',()=>dialog.close());
+form.addEventListener('submit',async event=>{
+  event.preventDefault();
+  const name=form.elements.name.value.trim();
+  const current=editablePreset();
+  if(!name||model.presets.some(item=>item.name===name&&(ui.naming==='new'||item.id!==current?.id))){
+    document.querySelector('#name-error').textContent='请输入一个未使用的组合名称。';return;
+  }
+  if(ui.naming==='new'){
+    const base=ui.newEmpty?{mode:'frequency',ids:[]}:current||{mode:'frequency',ids:[]};
+    const created={...base,id:crypto.randomUUID(),name,ids:[...base.ids]};
+    model.presets.push(created);
+    if(!await persist('已保存新组合「'+name+'」。'))return;
+    ui.editCombo=created.id;
+  }else{
+    current.name=name;
+    ui.note='';
+  }
+  dialog.close();render('#preset');
+});
+const libraryDialog=document.querySelector('#library-dialog');
+const termDialog=document.querySelector('#term-dialog');
+const libraryForm=document.querySelector('#library-form');
+const termForm=document.querySelector('#term-form');
+const syncLibraryDirection=()=>{document.querySelector('#library-direction-field').hidden=ui.renaming||libraryForm.elements.kind.value==='mixed';};
+libraryForm.elements.kind.addEventListener('change',syncLibraryDirection);
+function openLibraryDialog(renaming,fromAssistant){
+  ui.renaming=renaming;ui.createFromAssistant=fromAssistant;
+  const current=byId(ui.library);
+  const draftPairs=[...new Set((ui.draft?.rows||[]).filter(row=>directions.includes(row.direction)).map(row=>pairKey(row.direction)))];
+  const suggestedKind=draftPairs.length>1?'mixed':draftPairs.length===1?'pair':current?.kind||'pair';
+  libraryForm.elements.name.value=renaming?current.name:'';
+  libraryForm.elements.personal.checked=renaming&&!!current.personal;
+  libraryForm.elements.kind.value=fromAssistant?suggestedKind:ui.filter==='mixed'?'mixed':'pair';
+  libraryForm.elements.direction.innerHTML=pairOptions(pairs,fromAssistant?(draftPairs[0]||current?.direction||baseDirection):pairs.includes(ui.filter)?ui.filter:baseDirection);
+  document.querySelector('#library-kind-field').hidden=renaming;
+  syncLibraryDirection();
+  document.querySelector('#library-title').textContent=renaming?'重命名知识库':'新建知识库';
+  document.querySelector('#library-error').textContent='';
+  libraryDialog.showModal();
+}
+document.querySelector('#model-return').addEventListener('click',()=>openPage('assistant'));
+document.querySelectorAll('[data-close]').forEach(control=>control.addEventListener('click',()=>document.getElementById(control.dataset.close).close()));
+libraryForm.addEventListener('submit',async event=>{
+  event.preventDefault();
+  const name=libraryForm.elements.name.value.trim();
+  if(!name||model.libraries.some(item=>item.name===name&&(!ui.renaming||item.id!==ui.library))){
+    document.querySelector('#library-error').textContent='请输入未使用的知识库名称。';return;
+  }
+  if(ui.renaming){byId(ui.library).name=name;byId(ui.library).personal=libraryForm.elements.personal.checked;}
+  else{
+    ui.library=crypto.randomUUID();
+    const kind=libraryForm.elements.kind.value;
+    model.libraries.push({id:ui.library,name,personal:libraryForm.elements.personal.checked,hits:0,kind,direction:kind==='pair'?libraryForm.elements.direction.value:null,terms:[]});
+    ui.filter='all';
+  }
+  const fromAssistant=ui.createFromAssistant;
+  ui.createFromAssistant=false;
+  if(fromAssistant&&ui.draft)prepareDraft(byId(ui.library),ui.draft.rows,ui.draft.origin);
+  if(await persist('知识库已保存。'))libraryDialog.close();
+  render(fromAssistant?'#assistant-library':'[data-action="view-library"][data-value="'+ui.library+'"]');
+});
+termForm.addEventListener('submit',async event=>{
+  event.preventDefault();
+  const library=byId(ui.library);
+  const terms=library.terms;
+  const entry={...terms[ui.termIndex],source:termForm.elements.source.value.trim(),target:termForm.elements.target.value.trim(),note:termForm.elements.note.value.trim(),direction:termForm.elements.direction.value,enabled:termForm.elements.enabled.checked};
+  const conflict=terms.some((item,index)=>index!==ui.termIndex&&entryKey(item,library)===entryKey(entry,library));
+  if(!entry.source||!entry.target||conflict){
+    document.querySelector('#term-error').textContent='请填写原词和译法；同一翻译方向的原词不能重复。';return;
+  }
+  const versions=history(library);
+  if(ui.termIndex<0)terms.push(entry);
+  else{
+    const previous=terms[ui.termIndex];
+    if(previous.origin&&(previous.source!==entry.source||previous.target!==entry.target||entryDirection(previous,library)!==entry.direction))entry.edited=true;
+    terms[ui.termIndex]=entry;
+  }
+  recordVersion(library,versions,ui.termIndex<0?'新增术语':'编辑术语',1);
+  if(await persist('术语已保存。'))termDialog.close();render();
+});
+document.querySelector('.nav').addEventListener('click',event=>{
+  const tab=event.target.closest('[data-page]');
+  if(!tab)return;
+  if(tab.dataset.model)ui.modelPage=tab.dataset.model;
+  openPage(tab.dataset.page);
+  if(tab.dataset.model)requestModelPage();
+});
+const frame=document.querySelector('#model-frame');
+function requestModelPage(){
+  frame.contentWindow?.postMessage({type:'jianyi-open-model-page',page:ui.modelPage},'*');
+}
+frame.addEventListener('load',()=>{if(ui.page==='models')requestModelPage();});
+window.addEventListener('message',event=>{
+  if(event.source!==frame.contentWindow||event.data?.type!=='jianyi-model-config')return;
+  if(event.data.state?.loaded)readyModels=event.data.state;
+  if(event.data.height>0)frame.style.height=event.data.height+4+'px';
+  if(ui.page==='models'&&event.data.page&&ui.modelPage!==event.data.page){
+    ui.modelPage=event.data.page;
+    render();
+  }
+  if(ui.assistantReady===event.data.assistantReady)return;
+  ui.assistantReady=event.data.assistantReady;
+  if(ui.page==='assistant')render();
+});
+frame.addEventListener('load',()=>{if(readyModels)frame.contentWindow.syncNativeModels(readyModels);requestModelPage();});
+frame.src='models.html';
+let basicSettings={ocrEnabled:false,clipboardFallback:false,offlineMode:false,dwellMs:400,surfaceMode:'tooltip'},basicSaved={...basicSettings},basicDirty=false;
+let storageState=null,backupPreview=null;
+const leaveDialog=document.getElementById('leave-dialog');
+function showInfo(title,html){document.getElementById('info-title').textContent=title;document.getElementById('info-body').innerHTML=html;document.getElementById('info-dialog').showModal();}
+document.getElementById('close-info').onclick=()=>document.getElementById('info-dialog').close();
+document.getElementById('about-button').onclick=()=>showInfo('简译','<div class="stack"><strong>简译 · 0.8.1</strong><p>模型导入格式</p>'+button('翻译模型','about-models','translation','quiet')+button('OCR 模型','about-models','ocr','quiet')+button('导入助手模型','about-models','assistant','quiet')+'</div>');
+document.getElementById('info-body').addEventListener('click',event=>{const node=event.target.closest('[data-action="about-models"]');if(node){document.getElementById('info-dialog').close();openNativePage('models/'+node.dataset.value);}});
+function changeRows(before,after,library){
+ const a=new Map(before.map(row=>[entryKey(row,library),row])),b=new Map(after.map(row=>[entryKey(row,library),row]));
+ return [...b].filter(([key,row])=>!a.has(key)||JSON.stringify([a.get(key).target,a.get(key).enabled,a.get(key).note||''])!==JSON.stringify([row.target,row.enabled,row.note||''])).map(([key,row])=>({type:a.has(key)?'修改':'新增',source:row.source,before:a.get(key)?.target||'',after:row.target}))
+ .concat([...a].filter(([key])=>!b.has(key)).map(([,row])=>({type:'删除',source:row.source,before:row.target,after:''})));
+}
+function diffSummary(before,after,library){const changes=changeRows(before,after,library);return ['新增','修改','删除'].map(type=>type+' '+changes.filter(row=>row.type===type).length+' 条').join(' · ');}
+function versionDiff(before,after,library){
+ const changes=changeRows(before,after,library);
+ return '<details class="diff-list"><summary>'+esc(diffSummary(before,after,library))+'</summary><ul>'+changes.slice(0,50).map(row=>'<li>'+esc(row.type+' · '+row.source+'：'+row.before+(row.before&&row.after?' → ':'')+row.after)+'</li>').join('')+'</ul>'+(changes.length>50?'<small>仅显示前 50 项，可导出知识库核对完整内容。</small>':'')+'</details>';
+}
+function pageDirty(){
+ if(document.querySelector('dialog[open] form[data-dirty="true"]'))return true;
+ if(ui.page==='preferences')return preferenceDirty||preferencePreview.length>0;
+ if(ui.page==='combinations')return [...ui.comboDrafts].some(([id])=>{const row=model.presets.find(row=>row.id===id);return row&&comboDirty(row);});
+ if(ui.page==='retention')return JSON.stringify(retentionDraft)!==JSON.stringify(savedRetention);
+ if(ui.page==='translation'||ui.page==='capture')return basicDirty;
+ if(ui.page==='assistant')return !!ui.draft;
+ if(ui.page==='models')return !!frame.contentWindow.hasModelDraft?.();
+ return false;
+}
+async function saveCurrentCombination(){
+ const saved=preset(),draft=editablePreset();if(!saved||!comboDirty(saved,draft))return true;
+ if(model.presets.some(row=>row.id!==saved.id&&row.name===draft.name)){ui.note='已有同名组合';render();return false;}
+ const pending=structuredClone(draft);Object.assign(saved,{name:draft.name,mode:draft.mode,ids:[...draft.ids]});
+ if(!await persist('已保存组合「'+saved.name+'」。'))return false;
+ ui.comboDrafts.delete(saved.id);render();return true;
+}
+async function discardPageDraft(){
+ const modal=document.querySelector('dialog[open] form[data-dirty="true"]');if(modal){delete modal.dataset.dirty;modal.closest('dialog').close();}
+ if(ui.page==='preferences'){preferenceState=await nativeCall('preferences');preferenceDirty=false;preferencePreview=[];}
+ if(ui.page==='retention')Object.assign(retentionDraft,savedRetention);
+ if(ui.page==='combinations')ui.comboDrafts.clear();
+ if(ui.page==='models')frame.contentWindow.discardModelDraft?.();
+ if(ui.page==='translation'||ui.page==='capture'){basicSettings={...basicSaved};basicDirty=false;}
+ if(ui.page==='assistant'){ui.draft=null;ui.importFile=null;ui.assistantStep='setup';}
+}
+async function savePageDraft(){
+ try{
+  const modal=document.querySelector('dialog[open] form[data-dirty="true"]');
+  if(modal){if(!modal.checkValidity()){modal.reportValidity();return false;}const dialog=modal.closest('dialog');modal.requestSubmit();for(let i=0;i<100;i++){await new Promise(r=>setTimeout(r,20));if(!dialog.isConnected||!dialog.open)return pageDirty()?await savePageDraft():true;}return false;}
+  if(ui.page==='preferences'){if(preferencePreview.length){nativeToast('请先确认或丢弃示例提取结果');return false;}await persistPreferences();return !preferenceDirty;}
+  if(ui.page==='combinations')return await saveCurrentCombination();
+  if(ui.page==='retention'){await commitRetention({...retentionDraft});return JSON.stringify(retentionDraft)===JSON.stringify(savedRetention);}
+  if(ui.page==='models')return !!await frame.contentWindow.saveModelDraft?.();
+  if(ui.page==='assistant')return await saveDraft();
+  if(basicDirty){basicSettings=await nativeCall('basic-settings',{values:basicSettings});basicSaved={...basicSettings};basicDirty=false;return true;}
+  return true;
+ }catch(error){nativeToast(error.message);return false;}
+}
+async function guardNavigation(){
+ if(!pageDirty())return true;if(leaveDialog.open)return false;
+ leaveDialog.returnValue='stay';leaveDialog.showModal();
+ const result=await new Promise(resolve=>leaveDialog.addEventListener('close',()=>resolve(leaveDialog.returnValue),{once:true}));
+ if(result==='discard'){await discardPageDraft();return true;}
+ if(result==='save')return await savePageDraft();return false;
+}
+window.requestCloseSettings=async()=>{if(await guardNavigation())await nativeCall('window',{command:'close',confirmed:true});};
+document.querySelector('.window-controls').addEventListener('click',event=>{if(event.target.closest('[data-window="close"]')){event.stopImmediatePropagation();event.preventDefault();requestCloseSettings();}},true);
+document.querySelector('.nav').addEventListener('click',event=>{
+ const tab=event.target.closest('[data-page]');if(!tab||!pageDirty())return;
+ event.stopImmediatePropagation();event.preventDefault();
+ guardNavigation().then(ok=>{if(!ok)return;if(tab.dataset.model)ui.modelPage=tab.dataset.model;openPage(tab.dataset.page);if(tab.dataset.model)requestModelPage();});
+},true);
+async function requestCombo(id){if(id===preset()?.id)return;if(!await guardNavigation())return;ui.editCombo=id;render();}
+function basicView(){
+ if(ui.page==='translation')return pageHeading('语言与翻译方式')+'<section class="card stack narrow"><h2>'+esc((readyModels?.mode==='mt'?'本地翻译':readyModels?.mode==='llm'?'LLM · 本机':'LLM · 远程 API'))+'</h2><div class="bar"><strong>'+esc((languageLabels[readyModels?.source]||'自动识别')+' → '+(languageLabels[readyModels?.target]||'简体中文'))+'</strong>'+button('更改','translation-config','','primary')+'</div></section>';
+ const checkbox=(key,label)=>'<label class="select-all"><input type="checkbox" data-basic="'+key+'" '+(basicSettings[key]?'checked':'')+'>'+label+'</label>';
+ return pageHeading('取词与识图')+'<form id="basic-form" class="card stack narrow">'+checkbox('ocrEnabled','自动识图（OCR）')+checkbox('clipboardFallback','使用剪贴板读取选区')+checkbox('offlineMode','仅使用本机功能')+'<label class="retention-row"><span>选中后等待时间（毫秒）</span><input type="number" data-basic="dwellMs" min="200" max="1000" value="'+basicSettings.dwellMs+'" required></label><div class="actions">'+button('取消更改','cancel-basic','','quiet')+'<button class="primary">保存</button></div></form>';
+}
+function formatBytes(bytes){if(!Number.isFinite(bytes))return '未读取';return bytes>=1073741824?(bytes/1073741824).toFixed(2)+' GiB':(bytes/1048576).toFixed(1)+' MiB';}
+function storageView(){
+ const state=storageState;
+ return pageHeading('下载与存储')+'<div class="stack narrow"><section class="card stack"><h2>后续下载位置</h2><p class="file-name">'+esc(readyModels?.downloadDirectory||'')+'</p><div class="actions">'+button('更改位置','storage-directory','','quiet')+button('恢复默认','storage-reset','','quiet')+'</div></section><section class="card stack"><div class="bar"><h2>当前目录占用</h2>'+button('刷新','storage-refresh','','small quiet')+'</div>'
+ +(state?'<strong>'+formatBytes(state.totalBytes)+' · 磁盘剩余 '+formatBytes(state.freeBytes)+'</strong><div class="stack">'+state.groups.map(row=>'<div class="bar"><span>'+esc(row.name)+'</span><span>'+formatBytes(row.bytes)+'</span></div>').join('')+'</div>':'<p class="muted">点击刷新读取</p>')+'<div class="actions">'+button('清理未完成下载','storage-clean','','quiet')+button('迁移已有模型','storage-migrate','','quiet')+'</div></section></div>';
+}
+function backupView(){return pageHeading('备份与恢复')+'<div class="stack narrow"><section class="card stack"><h2>用户数据</h2><div class="actions">'+button('导出备份','export-backup','','primary')+button('选择备份恢复','preview-backup','','quiet')+'</div></section>'+(backupPreview?'<section class="card stack"><h2>恢复预览</h2><p>'+esc(backupPreview.name)+'</p><p>'+backupPreview.libraries+' 个知识库 · '+backupPreview.presets+' 个组合 · '+backupPreview.preferences+' 条偏好</p><p>恢复前将保存当前数据的恢复点</p><div class="actions">'+button('取消','cancel-backup','','quiet')+button('确认恢复','restore-backup','','primary')+'</div></section>':'')+'</div>';}
+let task=null,taskTimer;
+function showGlobalTask(message){if(!task)task={label:'正在处理',action:null};task.message=message;renderGlobalTask();}
+function renderGlobalTask(){
+ const node=document.getElementById('global-task');node.hidden=!task;if(!task)return;
+ node.innerHTML='<strong>'+esc(task.label)+'</strong><div>'+esc(task.message||'')+'</div><div class="actions">'+(task.active?'<button type="button" data-task="cancel">取消</button>':(task.action?'<button type="button" data-task="retry">重试</button>':'')+'<button type="button" data-task="dismiss">关闭</button>')+'</div>';
+}
+const originalNativeCall=window.nativeCall;
+const longActions={'download-model':'下载本机模型','download-languages':'配置离线语言','download-ocr':'下载 OCR 模型','download-runtime':'下载运行组件','import-model':'导入模型','retry-model-import':'重试导入','migrate-models':'迁移模型','export-backup':'导出备份','restore-backup':'恢复数据','model-list':'读取模型列表','check-model':'检测模型'};
+window.nativeCall=async(action,data={})=>{
+ const label=longActions[action];
+ if(task?.active&&label)throw Error('请先完成或取消当前任务');
+ if(label){clearTimeout(taskTimer);task={label,action,data,active:true,message:'正在准备…'};renderGlobalTask();}
+ try{const result=await originalNativeCall(action,data);if(label){task={label,message:'已完成'};renderGlobalTask();taskTimer=setTimeout(()=>{task=null;renderGlobalTask();},3000);}return result;}
+ catch(error){if(label){task={label,action,data,active:false,message:error.message};renderGlobalTask();}throw error;}
+};
+document.getElementById('global-task').addEventListener('click',event=>{const action=event.target.dataset.task;if(action==='cancel')nativeCall('cancel');if(action==='dismiss'){task=null;renderGlobalTask();}if(action==='retry'&&task?.action){const {action,data}=task;nativeCall(action,data).then(result=>{if(result?.configs){readyModels=result;frame.contentWindow.syncNativeModels?.(result);}}).catch(error=>nativeToast(error.message));}});
+async function refreshStorage(){storageState=await nativeCall('storage-state');render();}
+app.addEventListener('input',event=>{
+ const node=event.target;
+ for(const [id,key] of [['library-search','librarySearch'],['trash-search','trashSearch']])if(node.id===id){ui[key]=node.value;const pos=node.selectionStart;render('#'+id);document.getElementById(id)?.setSelectionRange(pos,pos);return;}
+ if(node.dataset.basic){basicSettings[node.dataset.basic]=node.type==='checkbox'?node.checked:Number(node.value);basicDirty=true;}
+ if(node.dataset.draftField){ui.draft.rows[Number(node.dataset.row)][node.dataset.draftField]=node.value;}
+});
+app.addEventListener('change',event=>{
+ const node=event.target;
+ if(node.id==='preferences-enabled'){preferenceState.document.enabled=node.checked;preferenceDirty=true;}
+ if(node.name==='selected-term'){if(node.checked)ui.selectedTerms.add(Number(node.value));else ui.selectedTerms.delete(Number(node.value));render();}
+ if(node.id==='select-visible-terms'){for(const {index} of visibleTerms(byId(ui.library)))if(node.checked)ui.selectedTerms.add(index);else ui.selectedTerms.delete(index);render();}
+ if(node.dataset.draftField||node.dataset.draftResolution!==undefined){if(node.dataset.draftResolution!==undefined){const row=ui.draft.rows[Number(node.dataset.draftResolution)];row.resolution=node.value;row.included=node.value==='update';}prepareDraft(byId(ui.draft.libraryId),ui.draft.rows,ui.draft.origin);render();}
+ if(node.id==='select-draft'){for(const row of ui.draft.rows)if(!row.problem&&row.status!=='duplicate'&&row.resolution!=='skip')row.included=node.checked;render();}
+});
+app.addEventListener('submit',async event=>{
+ if(event.target.id==='basic-form'){event.preventDefault();if(await savePageDraft()){nativeToast('已保存');render();}}
+ if(event.target.id==='surface-form'){event.preventDefault();basicSettings=await nativeCall('basic-settings',{values:{surfaceMode:new FormData(event.target).get('surfaceMode')}});basicSaved={...basicSettings};nativeToast('已保存');}
+});
+app.addEventListener('click',async event=>{
+ const node=event.target.closest('[data-action]');if(!node)return;const {action,value}=node.dataset;
+ if(action==='add-preference')document.getElementById('new-preference-dialog').showModal();
+ if(action==='close-new-preference')document.getElementById('new-preference-dialog').close();
+ if(action==='edit-preference'){ui.preferenceEdit=value;render();}
+ if(action==='global-preference'){const rule=preferenceState.document.rules.find(row=>row.id===value);trashPrompt('更改适用范围','将这条旧场景规则改为适用于该语言方向的所有内容？','确认更改',()=>{rule.scope='';preferenceDirty=true;render();});}
+ if(action==='cancel-preferences'){await discardPageDraft();render();}
+ if(action==='cancel-retention'){Object.assign(retentionDraft,savedRetention);render();}
+ if(action==='cancel-basic'){basicSettings={...basicSaved};basicDirty=false;render();}
+ if(action==='translation-config')openNativePage('models/translation');
+ if(action==='length-help')showInfo('长度计数','<p>英文等有空格的内容按词计数；中日韩文字按字近似计数。框选结果从翻译完成后计时，鼠标停留或编辑时暂停。</p>');
+ if(action==='select-combo')requestCombo(value);
+ if(action==='cancel-combination'){ui.comboDrafts.delete(preset().id);render();}
+ if(action==='activate-combination'){if(await guardNavigation()){model.active=value;await persist('已用于翻译');}}
+ if(action==='draft-filter'){ui.draftFilter=value;render();}
+ if(action==='draft-direction'){const direction=document.getElementById('draft-batch-direction').value;for(const row of ui.draft.rows){row.direction=direction;row.invalidLanguage=false;}prepareDraft(byId(ui.draft.libraryId),ui.draft.rows,ui.draft.origin);render();}
+ if(action==='repair-term-states'){
+   const rows=invalidTermStates();if(!rows.length)return;
+   trashPrompt('修正词条状态','将停用 '+rows.length+' 项状态异常的词条记录（含历史版本）。原词和译文会保留。','修正',async()=>{
+     for(const term of rows)term.enabled=false;
+     await persist('已修正词条状态');
+   });
+ }
+ if(action==='term-detail'){const row=byId(ui.library).terms[Number(value)];showInfo('词条详情','<dl><dt>原词</dt><dd>'+esc(row.source)+'</dd><dt>译法</dt><dd>'+esc(row.target)+'</dd><dt>来源</dt><dd>'+esc(row.reference||row.origin||'手动')+'</dd><dt>备注</dt><dd>'+esc(row.note||'—')+'</dd></dl>');}
+ if(action==='export-library'){await nativeCall('export-library',{id:value});}
+ if(['enable-terms','disable-terms','delete-terms'].includes(action)){
+   const library=byId(ui.library),indices=visibleTerms(library).filter(row=>ui.selectedTerms.has(row.index)).map(row=>row.index);if(!indices.length)return;
+   const apply=async()=>{const versions=history(library);if(action==='delete-terms')library.terms=library.terms.filter((_,index)=>!indices.includes(index));else for(const index of indices)library.terms[index].enabled=action==='enable-terms';recordVersion(library,versions,action==='delete-terms'?'批量删除词条':action==='enable-terms'?'批量启用词条':'批量停用词条',indices.length);ui.selectedTerms.clear();await persist('已处理 '+indices.length+' 条');};
+   if(action==='delete-terms')trashPrompt('删除所选词条','删除 '+indices.length+' 条词条？可以通过知识库版本记录恢复。','删除',apply);else await apply();
+ }
+ if(action==='batch-restore'){
+   const records=value==='library'?model.libraries:model.presets,items=records.filter(row=>row.deletedAt&&normalize(row.name).includes(normalize(ui.trashSearch)));
+   trashPrompt('批量恢复','选择要恢复的内容','下一步',ids=>{
+     const picked=items.filter(row=>ids.includes(row.id)),children=value==='combo'?[...new Map(picked.flatMap(row=>row.ids.map(byId).filter(lib=>lib?.deletedAt)).map(lib=>[lib.id,lib])).values()]:[];
+     const restore=selected=>{for(const row of picked){delete row.deletedAt;if(value==='combo')row.ids=row.ids.filter(byId);}for(const library of children)if(selected.includes(library.id))delete library.deletedAt;finishTrash('已恢复 '+picked.length+' 项');};
+     if(children.length)trashPrompt('恢复包含的知识库','勾选随组合一起恢复的知识库','确认恢复',restore,{items:children,selected:true});else restore([]);
+   },{items,requireSelection:true});
+ }
+ if(action==='storage-refresh')await refreshStorage();
+ if(action==='storage-directory'||action==='storage-reset'){readyModels=await nativeCall('download-directory',{reset:action==='storage-reset'});frame.contentWindow.syncNativeModels?.(readyModels);storageState=null;render();}
+ if(action==='storage-clean')trashPrompt('清理未完成下载','仅删除当前模型目录内未完成的 .download 文件，保留完整模型。','清理',async()=>{await nativeCall('clean-downloads');await refreshStorage();});
+ if(action==='storage-migrate')trashPrompt('迁移已有模型','选择新文件夹后，复制并校验简译管理的模型，成功后切换路径；原文件保留。','选择新位置',async()=>{const state=await nativeCall('migrate-models');if(state){readyModels=state;frame.contentWindow.syncNativeModels?.(state);storageState=null;render();}});
+ if(action==='export-backup'){const message=await nativeCall('export-backup');if(message)nativeToast(message);}
+ if(action==='preview-backup'){backupPreview=null;render();backupPreview=await nativeCall('preview-backup');render();}
+ if(action==='cancel-backup'){backupPreview=null;render();}
+ if(action==='restore-backup')trashPrompt('恢复用户数据','将替换知识库、组合、偏好与基础设置，并先保存当前数据恢复点。模型文件和 API Key 保留。','确认恢复',async()=>{await nativeCall('restore-backup');backupPreview=null;await bootstrapNative();openPage('backup');nativeToast('已恢复，原数据恢复点已保存');});
+});
+
+for(const title of document.querySelectorAll('.nav>li>.nav-title')){
+ const control=document.createElement('button');control.type='button';control.className='nav-title';control.id=title.id;control.textContent=title.textContent;control.setAttribute('aria-expanded','false');const list=title.nextElementSibling;list.hidden=true;title.replaceWith(control);control.onclick=()=>{list.hidden=!list.hidden;control.setAttribute('aria-expanded',String(!list.hidden));};
+}
+document.addEventListener('input',event=>{const form=event.target.form;if(form&&['term-form','library-form','preset-form','new-preference'].includes(form.id))form.dataset.dirty='true';},true);
+document.addEventListener('change',event=>{const form=event.target.form;if(form&&['term-form','library-form','preset-form','new-preference'].includes(form.id))form.dataset.dirty='true';},true);
+document.addEventListener('close',event=>{if(event.target instanceof HTMLDialogElement)for(const form of event.target.querySelectorAll('form'))delete form.dataset.dirty;},true);
+const unguardedOpenPage=openPage;
+openPage=page=>{if(ui.page!==page&&pageDirty()){guardNavigation().then(ok=>{if(ok)unguardedOpenPage(page);});return;}unguardedOpenPage(page);};
+const unguardedNativePage=window.openNativePage;
+window.openNativePage=page=>{if(pageDirty()){guardNavigation().then(ok=>{if(ok)unguardedNativePage(page);});return;}unguardedNativePage(page);};
+render();
+bootstrapNative();
+</script>
+</body>
+</html>

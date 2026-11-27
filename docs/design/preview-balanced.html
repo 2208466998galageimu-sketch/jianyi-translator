@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-canvas-width="1200" data-canvas-height="720">
+<head>
+<meta charset="UTF-8">
+<title>Thanslator Popper — Balanced Redesign</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 1200px; height: 720px;
+    font-family: "Segoe UI Variable Text", "Segoe UI", "Microsoft YaHei UI", "Microsoft YaHei", system-ui, sans-serif;
+    overflow: hidden;
+    background: #1a1b22;
+  }
+  .desktop {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 25% 20%, #2d3040 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 85%, #2a2d3d 0%, transparent 55%),
+      linear-gradient(135deg, #232532 0%, #1a1b26 100%);
+  }
+  .doc-lines {
+    position: absolute; inset: 70px 100px;
+    filter: blur(7px); opacity: 0.5;
+  }
+  .doc-line {
+    height: 11px; border-radius: 6px; margin-bottom: 16px;
+    background: linear-gradient(90deg, #4a4f66, #35394d);
+  }
+  .doc-line.short { width: 50%; }
+  .doc-line.mid   { width: 72%; }
+  .doc-line.long  { width: 88%; }
+  .doc-line.hl    { background: linear-gradient(90deg, #6b8cff, #5b7cf0); width: 35%; height: 16px; }
+
+  /* ============ 平衡版 Popper 340×156 ============ */
+  .popper {
+    position: absolute;
+    top: 48%; left: 46%;
+    transform: translate(-50%, -50%);
+    width: 340px;
+    padding: 12px 14px 10px;
+    border-radius: 14px;
+    background: linear-gradient(180deg, rgba(40,42,54,0.92) 0%, rgba(26,28,38,0.94) 100%);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.06) inset,
+      0 20px 55px rgba(0,0,0,0.55),
+      0 3px 14px rgba(0,0,0,0.35);
+    backdrop-filter: blur(24px) saturate(1.3);
+    color: #e8eaf0;
+    user-select: none;
+  }
+
+  /* 第一行：品牌 + 控制 */
+  .row1 {
+    display: flex; align-items: center; gap: 8px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+  .logo {
+    width: 22px; height: 22px; border-radius: 7px;
+    background: linear-gradient(135deg, #6b8cff 0%, #9b6bff 100%);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 2px 6px rgba(107,140,255,0.35);
+  }
+  .logo svg { width: 12px; height: 12px; }
+  .brand {
+    font-size: 13px; font-weight: 600; color: #f2f3f7;
+    letter-spacing: 0.2px; flex: 1;
+  }
+  .icon-btn {
+    width: 24px; height: 24px; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    color: #8b90a5; cursor: pointer; transition: all 0.15s;
+  }
+  .icon-btn:hover { background: rgba(255,255,255,0.08); color: #fff; }
+  .icon-btn svg { width: 13px; height: 13px; }
+
+  /* 总开关 34×18 */
+  .power {
+    width: 34px; height: 18px; border-radius: 9px;
+    background: linear-gradient(135deg, #4f7cff, #6b8cff);
+    position: relative; cursor: pointer; flex-shrink: 0;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.1) inset, 0 1px 5px rgba(79,124,255,0.4);
+  }
+  .power .knob {
+    position: absolute; top: 2px; right: 2px;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  }
+
+  /* 通用 segmented */
+  .seg {
+    display: flex;
+    background: rgba(0,0,0,0.3);
+    border-radius: 8px; padding: 2px;
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+  .seg-item {
+    flex: 1; text-align: center;
+    font-size: 12px; font-weight: 500;
+    padding: 5px 0; border-radius: 6px;
+    color: #9aa0b5; cursor: pointer; transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .seg-item.active {
+    background: linear-gradient(180deg, rgba(255,255,255,0.13), rgba(255,255,255,0.06));
+    color: #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  }
+
+  /* 第二行：模式 */
+  .row2 { padding-top: 10px; }
+
+  /* 第三行：短语拆分 */
+  .row3 {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 2px 0;
+  }
+  .row3-label {
+    font-size: 12px; color: #c5c9d8;
+    display: flex; align-items: center; gap: 6px;
+    flex: 1;
+  }
+  .row3-label .dot {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: #6b8cff;
+    box-shadow: 0 0 5px rgba(107,140,255,0.6);
+  }
+  /* 小 toggle 32×17 */
+  .toggle {
+    width: 32px; height: 17px; border-radius: 9px;
+    background: linear-gradient(135deg, #4f7cff, #6b8cff);
+    position: relative; cursor: pointer; flex-shrink: 0;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.1) inset;
+  }
+  .toggle .knob {
+    position: absolute; top: 2px; right: 2px;
+    width: 13px; height: 13px; border-radius: 50%;
+    background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  }
+
+  /* 第四行：呈现方式 */
+  .row4 {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 2px 0;
+  }
+  .row4-label {
+    font-size: 12px; color: #c5c9d8;
+    width: 64px; flex-shrink: 0;
+  }
+  .row4 .seg { flex: 1; }
+  .row4 .seg-item { font-size: 11.5px; padding: 4px 0; }
+
+  /* 第五行：底部提示 */
+  .footer {
+    margin-top: 10px; padding-top: 8px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    font-size: 10.5px; color: #6e7387;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .kbd {
+    display: inline-block; padding: 1px 5px; border-radius: 4px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-bottom-width: 1.5px;
+    font-family: "Cascadia Code", "Consolas", monospace;
+    font-size: 9.5px; color: #a8adbf;
+  }
+
+  /* 标注 */
+  .spec-tag {
+    position: absolute;
+    bottom: 10%; left: 50%; transform: translateX(-50%);
+    font-size: 11px; color: #6e7387;
+    font-family: "Cascadia Code", "Consolas", monospace;
+    letter-spacing: 0.3px;
+  }
+  .spec-tag b { color: #a8adbf; }
+</style>
+</head>
+<body>
+<div class="desktop">
+  <div class="doc-lines">
+    <div class="doc-line long"></div>
+    <div class="doc-line mid"></div>
+    <div class="doc-line hl"></div>
+    <div class="doc-line long"></div>
+    <div class="doc-line short"></div>
+    <div class="doc-line mid"></div>
+    <div class="doc-line long"></div>
+    <div class="doc-line short"></div>
+  </div>
+</div>
+
+<div class="popper">
+  <!-- 第一行 -->
+  <div class="row1">
+    <div class="logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 5h7M4 12h10M4 19h7"/>
+        <path d="M15 14l5 5m0-5l-5 5"/>
+      </svg>
+    </div>
+    <span class="brand">简译</span>
+    <div class="icon-btn" title="收向侧边（自动吸附最近边缘）">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <!-- Popper 小矩形（左侧） -->
+        <rect x="4" y="4" width="9" height="16" rx="1.5"/>
+        <!-- 中间把手竖线 -->
+        <line x1="8.5" y1="8" x2="8.5" y2="16"/>
+        <!-- 朝右连接线 -->
+        <line x1="13" y1="12" x2="18" y2="12"/>
+        <!-- 朝右 V 箭头 -->
+        <polyline points="15.5,9 18.5,12 15.5,15"/>
+      </svg>
+    </div>
+    <div class="icon-btn" title="隐藏到托盘">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+        <line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+    </div>
+    <div class="power"><div class="knob"></div></div>
+  </div>
+
+  <!-- 第二行：模式 -->
+  <div class="row2">
+    <div class="seg">
+      <div class="seg-item">通序翻译</div>
+      <div class="seg-item active">锁序直译</div>
+    </div>
+  </div>
+
+  <!-- 第三行：短语拆分 -->
+  <div class="row3">
+    <div class="row3-label">
+      <span class="dot"></span>
+      短语拆分
+    </div>
+    <div class="toggle"><div class="knob"></div></div>
+  </div>
+
+  <!-- 第四行：呈现方式 -->
+  <div class="row4">
+    <div class="row4-label">呈现方式</div>
+    <div class="seg">
+      <div class="seg-item active">悬注</div>
+      <div class="seg-item">常驻面板</div>
+    </div>
+  </div>
+
+  <!-- 第五行：底部提示 -->
+  <div class="footer">
+    <span>选中文本后悬停，或按 <span class="kbd">Ctrl</span>+<span class="kbd">Shift</span>+<span class="kbd">D</span></span>
+  </div>
+</div>
+
+<div class="spec-tag">
+  <b>340 × 156 px</b> · 保留全部原文文案 · 紧凑间距 · 比初版小 45%
+</div>
+</body>
+</html>

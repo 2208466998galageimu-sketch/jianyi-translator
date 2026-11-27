@@ -1,0 +1,11 @@
+{
+  "u.s": [{ "pos": "n.", "glosses": ["美国"] }],
+  "u.k": [{ "pos": "n.", "glosses": ["英国"] }],
+  "c++": [{ "pos": "n.", "glosses": ["C++（编程语言）"] }],
+  "c#": [{ "pos": "n.", "glosses": ["C#（编程语言）"] }],
+  "node.js": [{ "pos": "n.", "glosses": ["Node.js（JavaScript 运行时）"] }],
+  "e.g": [{ "pos": "adv.", "glosses": ["例如"] }],
+  "i.e": [{ "pos": "adv.", "glosses": ["即"] }],
+  "vs": [{ "pos": "prep.", "glosses": ["对", "与……相比"] }],
+  "etc": [{ "pos": "adv.", "glosses": ["等等"] }]
+}

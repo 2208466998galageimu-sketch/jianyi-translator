@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Thanslator.App/Thanslator.App.csproj" />
+    <Project Path="src/Thanslator.Capture/Thanslator.Capture.csproj" />
+    <Project Path="src/Thanslator.Core/Thanslator.Core.csproj" />
+    <Project Path="src/Thanslator.Dictionary/Thanslator.Dictionary.csproj" />
+    <Project Path="src/Thanslator.Storage/Thanslator.Storage.csproj" />
+    <Project Path="src/Thanslator.Translation/Thanslator.Translation.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Thanslator.Tests/Thanslator.Tests.csproj" />
+  </Folder>
+</Solution>

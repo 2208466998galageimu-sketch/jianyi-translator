@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="6.0.4" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+    <!-- UseWPF 会替换默认隐式 using 列表，这里补回测试用到的系统命名空间 -->
+    <Using Include="System.IO" />
+    <Using Include="System.Net.Http" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Thanslator.Core\Thanslator.Core.csproj" />
+    <ProjectReference Include="..\..\src\Thanslator.Storage\Thanslator.Storage.csproj" />
+    <ProjectReference Include="..\..\src\Thanslator.Dictionary\Thanslator.Dictionary.csproj" />
+    <ProjectReference Include="..\..\src\Thanslator.Translation\Thanslator.Translation.csproj" />
+    <ProjectReference Include="..\..\src\Thanslator.Capture\Thanslator.Capture.csproj" />
+  </ItemGroup>
+
+</Project>
