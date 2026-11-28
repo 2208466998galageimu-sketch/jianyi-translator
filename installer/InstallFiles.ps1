@@ -160,6 +160,9 @@ try {
     foreach ($relative in $incoming.Keys) {
         $path = Resolve-File $root $relative
         if ([IO.File]::Exists($path) -and !$owned.ContainsKey($relative)) {
+            # Some legacy packages shipped runtime files omitted from their manifest.
+            if ($knownLegacy -and !$installed.ContainsKey($relative) -and
+                $incoming[$relative] -and (Get-Hash $path) -eq $incoming[$relative]) { continue }
             throw "An existing file could not be verified as part of Jianyi."
         }
     }

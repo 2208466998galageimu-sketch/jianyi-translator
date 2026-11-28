@@ -1,4 +1,4 @@
-#Requires -Version 5.1
+﻿#Requires -Version 5.1
 [CmdletBinding()]
 param([string] $Makensis = '')
 
@@ -130,6 +130,7 @@ try {
     $results.Add('fresh setup records exact files and leaves OCR optional')
 
     $previous = Make-Legacy 'verified-mixed'
+    Copy-Item -LiteralPath (Join-Path $newSource 'runtime.dll') -Destination $previous
     $rootFile = Join-Path $previous 'notes.dll'
     $childFile = Join-Path $previous 'OcrHost\user-keep.txt'
     [IO.File]::WriteAllText($rootFile, 'personal root file')
@@ -139,6 +140,7 @@ try {
     $oldUninstallerHash = (Get-FileHash -LiteralPath (Join-Path $previous 'uninstall.exe')).Hash
     $different = Join-Path $runRoot 'must-not-relocate'
     Assert-That ((Run-Setup $newInstaller "/S /D=$different") -eq 0) 'Known previous release did not upgrade'
+    Assert-That ([IO.File]::ReadAllText((Join-Path $previous 'runtime.dll')) -eq 'new-runtime') 'Identical runtime was altered'
     Assert-That (-not (Test-Path -LiteralPath $different)) 'Upgrade moved away from retained data'
     Assert-That (-not (Test-Path -LiteralPath (Join-Path $previous 'obsolete.dll'))) 'Known obsolete program file was not cleaned'
     Assert-That (-not (Test-Path -LiteralPath (Join-Path $previous 'data\uninstalled.txt'))) 'Legacy uninstaller was launched'
